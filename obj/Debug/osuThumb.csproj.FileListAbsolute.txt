@@ -1,0 +1,10 @@
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\bin\Debug\osuThumb.exe.config
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\bin\Debug\osuThumb.exe
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\bin\Debug\osuThumb.pdb
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Debug\osuThumb.csprojAssemblyReference.cache
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Debug\osuThumb.MainForm.resources
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Debug\osuThumb.Properties.Resources.resources
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Debug\osuThumb.csproj.GenerateResource.cache
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Debug\osuThumb.csproj.CoreCompileInputs.cache
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Debug\osuThumb.exe
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Debug\osuThumb.pdb
