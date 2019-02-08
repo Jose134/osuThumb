@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace osuThumb
 {
@@ -57,32 +59,6 @@ namespace osuThumb
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            /*
-            string bgPath = thumbFolder + @"\" + idBox.Text + "l.jpg";
-            if (!File.Exists(bgPath))
-            {
-                MessageBox.Show("ERROR: Couldn't find background image, is id correct?", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            
-            Image bgImg = Bitmap.FromFile(bgPath);
-
-            Graphics g = preview.CreateGraphics();
-            g.DrawImage(bgImg, new RectangleF(0, 15, preview.Width, preview.Height - 15));
-
-            SolidBrush semiBlackBursh = new SolidBrush(Color.FromArgb(191, 0, 0, 0));
-            g.FillRectangle(semiBlackBursh, new Rectangle(0, 0, preview.Width, preview.Height));
-
-            SolidBrush fontBrush = new SolidBrush(Color.FromArgb(255, 255, 255, 255));
-
-            Font test = new Font(font.FontFamily, 70);
-
-            float f_acc = float.Parse(accBox.Text);
-            string acc = f_acc.ToString("0.00");
-            g.DrawString(acc + "%", font, fontBrush, new PointF(30, 30));
-
-            g.DrawString(starBox.Text + "*", test, fontBrush, new PointF());
-            */
             using (Graphics g = preview.CreateGraphics())
             {
                 //Renders each object in the list
@@ -99,10 +75,9 @@ namespace osuThumb
                         }
                         io.LoadImage();
 
-                        //TO DO: COLOR TINT
+                        Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
 
-
-                        g.DrawImage(io.image, io.rect);
+                        g.DrawImage(bitmap, io.rect);
                     }
                     else if (renderObject.GetType() == typeof(TextObject))
                     {
@@ -112,6 +87,11 @@ namespace osuThumb
                         {
                             float f_acc = float.Parse(accBox.Text);
                             to.text = f_acc.ToString("0.00") + "%";
+                            to.text = to.text.Replace(',', '.');
+                        }
+                        else if (to.text == "%SR%")
+                        {
+                            to.text = starBox.Text + "%";
                             to.text = to.text.Replace(',', '.');
                         }
 
@@ -128,6 +108,35 @@ namespace osuThumb
                 }
 
             }
+        }
+
+        private Bitmap ColorTint (Bitmap src, Color tint)
+        {
+            BitmapData data = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            byte[] pixelBuffer = new byte[data.Stride * data.Height];
+
+            float r, g, b;
+            for (int i = 0; (i + 4) < pixelBuffer.Length; i += 4) {
+                b = pixelBuffer[i]   + (255 - pixelBuffer[i])   * ((float)tint.B / 255);
+                g = pixelBuffer[i+1] + (255 - pixelBuffer[i+1]) * ((float)tint.G / 255);
+                r = pixelBuffer[i+2] + (255 - pixelBuffer[i+2]) * ((float)tint.R / 255);
+
+                if (b > 255) { b = 255; }
+                if (g > 255) { g = 255; }
+                if (r > 255) { r = 255; }
+
+                pixelBuffer[i]   = (byte)b;
+                pixelBuffer[i+1] = (byte)g;
+                pixelBuffer[i+2] = (byte)r;
+            }
+
+            Bitmap result = new Bitmap(src.Width, src.Height);
+            BitmapData resultData = result.LockBits(new Rectangle(0, 0, result.Width, result.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+            Marshal.Copy(pixelBuffer, 0, resultData.Scan0, pixelBuffer.Length);
+            result.UnlockBits(resultData);
+
+            return result;
         }
 
         private void loadButton_Click(object sender, EventArgs e)
@@ -159,7 +168,6 @@ namespace osuThumb
             {
                 if (line == string.Empty) { continue; }
 
-                Console.WriteLine(line);
                 string noSpaces = line.Replace(" ", "");
 
                 //Looks for object start
