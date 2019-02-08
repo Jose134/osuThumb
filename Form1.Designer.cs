@@ -34,6 +34,10 @@
             this.idLabel = new System.Windows.Forms.Label();
             this.accLabel = new System.Windows.Forms.Label();
             this.accBox = new System.Windows.Forms.TextBox();
+            this.fontButton = new System.Windows.Forms.Button();
+            this.starBox = new System.Windows.Forms.TextBox();
+            this.starLabel = new System.Windows.Forms.Label();
+            this.loadButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // preview
@@ -85,11 +89,52 @@
             this.accBox.Size = new System.Drawing.Size(210, 20);
             this.accBox.TabIndex = 5;
             // 
+            // fontButton
+            // 
+            this.fontButton.Location = new System.Drawing.Point(501, 320);
+            this.fontButton.Name = "fontButton";
+            this.fontButton.Size = new System.Drawing.Size(287, 23);
+            this.fontButton.TabIndex = 6;
+            this.fontButton.Text = "Select Font";
+            this.fontButton.UseVisualStyleBackColor = true;
+            this.fontButton.Click += new System.EventHandler(this.fontButton_Click);
+            // 
+            // starBox
+            // 
+            this.starBox.Location = new System.Drawing.Point(578, 66);
+            this.starBox.Name = "starBox";
+            this.starBox.Size = new System.Drawing.Size(210, 20);
+            this.starBox.TabIndex = 8;
+            // 
+            // starLabel
+            // 
+            this.starLabel.AutoSize = true;
+            this.starLabel.Location = new System.Drawing.Point(512, 69);
+            this.starLabel.Name = "starLabel";
+            this.starLabel.Size = new System.Drawing.Size(60, 13);
+            this.starLabel.TabIndex = 7;
+            this.starLabel.Text = "Star Rating";
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(501, 291);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.loadButton.Size = new System.Drawing.Size(287, 23);
+            this.loadButton.TabIndex = 9;
+            this.loadButton.Text = "Load Layout";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 390);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.starBox);
+            this.Controls.Add(this.starLabel);
+            this.Controls.Add(this.fontButton);
             this.Controls.Add(this.accBox);
             this.Controls.Add(this.accLabel);
             this.Controls.Add(this.idLabel);
@@ -112,6 +157,10 @@
         private System.Windows.Forms.Label idLabel;
         private System.Windows.Forms.Label accLabel;
         private System.Windows.Forms.TextBox accBox;
+        private System.Windows.Forms.Button fontButton;
+        private System.Windows.Forms.TextBox starBox;
+        private System.Windows.Forms.Label starLabel;
+        private System.Windows.Forms.Button loadButton;
     }
 }
 
