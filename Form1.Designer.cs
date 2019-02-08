@@ -38,6 +38,8 @@
             this.starBox = new System.Windows.Forms.TextBox();
             this.starLabel = new System.Windows.Forms.Label();
             this.loadButton = new System.Windows.Forms.Button();
+            this.rankingBox = new System.Windows.Forms.TextBox();
+            this.rankingLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // preview
@@ -126,11 +128,29 @@
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
+            // rankingBox
+            // 
+            this.rankingBox.Location = new System.Drawing.Point(578, 92);
+            this.rankingBox.Name = "rankingBox";
+            this.rankingBox.Size = new System.Drawing.Size(210, 20);
+            this.rankingBox.TabIndex = 11;
+            // 
+            // rankingLabel
+            // 
+            this.rankingLabel.AutoSize = true;
+            this.rankingLabel.Location = new System.Drawing.Point(525, 95);
+            this.rankingLabel.Name = "rankingLabel";
+            this.rankingLabel.Size = new System.Drawing.Size(47, 13);
+            this.rankingLabel.TabIndex = 10;
+            this.rankingLabel.Text = "Ranking";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 390);
+            this.Controls.Add(this.rankingBox);
+            this.Controls.Add(this.rankingLabel);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.starBox);
             this.Controls.Add(this.starLabel);
@@ -161,6 +181,8 @@
         private System.Windows.Forms.TextBox starBox;
         private System.Windows.Forms.Label starLabel;
         private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.TextBox rankingBox;
+        private System.Windows.Forms.Label rankingLabel;
     }
 }
 

@@ -57,6 +57,7 @@ namespace osuThumb
             }
         }
 
+        //THUMBNAIL GENERATOR
         private void generateButton_Click(object sender, EventArgs e)
         {
             using (Graphics g = preview.CreateGraphics())
@@ -71,19 +72,32 @@ namespace osuThumb
                     {
                         ImageObject io = (ImageObject)renderObject;
                         //Checks for variables in path property
+                        string save = io.path;
                         if (io.path == "%BG%")
                         {
                             io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
+                            save = "%BG%";
+                        }
+                        else if (io.path == "%RANKING%")
+                        {
+                            io.path = "res/ranking/ranking-" + rankingBox.Text.ToLower() + ".png";
+                            save = "%RANKING%";
+                        }
+                        else if (io.path == "%MODS%")
+                        {
+                            io.path = "res/mods/selection-mod-doubletime" + ".png";
+                            save = "%MODS%";
                         }
                         io.LoadImage();
+                        io.path = save;
 
                         Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
 
                         Rectangle rect = new Rectangle(
                             (int)(io.rect.Y * preview.Height),
                             (int)(io.rect.X * preview.Width),
-                            (int)(io.rect.Width * preview.Width),
-                            (int)(io.rect.Height * preview.Height)
+                            (int)(io.rect.Width * (io.canvasSize ? preview.Width : bitmap.Width)),
+                            (int)(io.rect.Height * (io.canvasSize ? preview.Width : bitmap.Height))
                         );
 
                         g.DrawImage(bitmap, rect);
@@ -161,6 +175,7 @@ namespace osuThumb
             return result;
         }
 
+        //LAYOUT LOADER
         private void loadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -207,13 +222,13 @@ namespace osuThumb
                     //Looks for object properties
                     if (noSpaces.StartsWith("text:"))
                     {
-                        string[] data = line.Split(':');
-                        textObject.text = data[1].Substring(1, data[1].Length - 1);
+                        string[] data = noSpaces.Split(':');
+                        textObject.text = data[1];
                     }
                     else if (noSpaces.StartsWith("position:"))
                     {
-                        string[] data = line.Split(':');
-                        data[1] = data[1].Substring(2, data[1].Length - 3);
+                        string[] data = noSpaces.Split(':');
+                        data[1] = data[1].Substring(1, data[1].Length - 2);
 
                         string[] split = data[1].Split(',');
                         
@@ -225,8 +240,8 @@ namespace osuThumb
                     }
                     else if (noSpaces.StartsWith("color:"))
                     {
-                        string[] data = line.Split(':');
-                        data[1] = data[1].Substring(2, data[1].Length - 3);
+                        string[] data = noSpaces.Split(':');
+                        data[1] = data[1].Substring(1, data[1].Length - 2);
 
                         string[] split = data[1].Split(',');
 
@@ -239,7 +254,7 @@ namespace osuThumb
                     }
                     else if (noSpaces.StartsWith("font-size:"))
                     {
-                        string[] data = line.Split(':');
+                        string[] data = noSpaces.Split(':');
                         int size = int.Parse(data[1]);
 
                         textObject.textSize = size;
@@ -258,8 +273,8 @@ namespace osuThumb
                     //Looks for object properties
                     if (noSpaces.StartsWith("rect:"))
                     {
-                        string[] data = line.Split(':');
-                        data[1] = data[1].Substring(2, data[1].Length - 3);
+                        string[] data = noSpaces.Split(':');
+                        data[1] = data[1].Substring(1, data[1].Length - 2);
 
                         string[] split = data[1].Split(',');
                         
@@ -273,8 +288,8 @@ namespace osuThumb
                     }
                     else if (noSpaces.StartsWith("color:"))
                     {
-                        string[] data = line.Split(':');
-                        data[1] = data[1].Substring(2, data[1].Length - 3);
+                        string[] data = noSpaces.Split(':');
+                        data[1] = data[1].Substring(1, data[1].Length - 2);
 
                         string[] split = data[1].Split(',');
 
@@ -299,13 +314,13 @@ namespace osuThumb
                     //Looks for object properties
                     if (noSpaces.StartsWith("path:"))
                     {
-                        string[] data = line.Split(':');
-                        imageObject.path = data[1].Substring(1, data[1].Length - 1);
+                        string[] data = noSpaces.Split(':');
+                        imageObject.path = data[1];
                     }
                     else if (noSpaces.StartsWith("rect:"))
                     {
-                        string[] data = line.Split(':');
-                        data[1] = data[1].Substring(2, data[1].Length - 3);
+                        string[] data = noSpaces.Split(':');
+                        data[1] = data[1].Substring(1, data[1].Length - 2);
 
                         string[] split = data[1].Split(',');
 
@@ -318,8 +333,8 @@ namespace osuThumb
                     }
                     else if (noSpaces.StartsWith("color:"))
                     {
-                        string[] data = line.Split(':');
-                        data[1] = data[1].Substring(2, data[1].Length - 3);
+                        string[] data = noSpaces.Split(':');
+                        data[1] = data[1].Substring(1, data[1].Length - 2);
 
                         string[] split = data[1].Split(',');
 
@@ -330,6 +345,16 @@ namespace osuThumb
 
                         imageObject.color = Color.FromArgb(a, r, g, b);
                     }
+                    else if (noSpaces.StartsWith("canvas-size:"))
+                    {
+                        string[] data = noSpaces.Split(':');
+                        bool canvasSize = false;
+                        if (data[1] == "true")
+                        {
+                            canvasSize = true;
+                        }
+                        imageObject.canvasSize = canvasSize;
+                     }
 
                     //End object
                     if (noSpaces[0] == '}')

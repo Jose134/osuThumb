@@ -13,6 +13,7 @@ namespace osuThumb
         private string _path;
         private RectangleF _rect;
         private Color _color;
+        private bool _canvasSize;
 
         public Image image
         {
@@ -58,6 +59,17 @@ namespace osuThumb
                 _color = value;
             }
         }
+        public bool canvasSize
+        {
+            get
+            {
+                return _canvasSize;
+            }
+            set
+            {
+                _canvasSize = value;
+            }
+        }
 
         //Constructor
         public ImageObject ()
@@ -66,12 +78,14 @@ namespace osuThumb
             this._path = "";
             this._rect = new RectangleF(0, 0, 1, 1);
             this._color = Color.FromArgb(255, 255, 255, 255);
+            this._canvasSize = false;
         }
-        public ImageObject(string path, RectangleF rect, Color color)
+        public ImageObject(string path, RectangleF rect, Color color, bool canvasSize)
         {
             this._path = path;
             this._rect = rect;
             this._color = color;
+            this._canvasSize = canvasSize;
 
             LoadImage();
         }
