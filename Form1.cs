@@ -20,7 +20,7 @@ namespace osuThumb
         private string thumbFolder = "";
 
         private List<object> renderObjects = new List<object>();
-        private Font font = new Font("Arial", 24);
+        private Font defaultFont = new Font("Arial", 24);
 
         public MainForm()
         {
@@ -53,7 +53,7 @@ namespace osuThumb
             FontDialog fontDialog = new FontDialog();
             if (fontDialog.ShowDialog() == DialogResult.OK)
             {
-                font = fontDialog.Font;
+                defaultFont = fontDialog.Font;
             }
         }
 
@@ -61,6 +61,8 @@ namespace osuThumb
         {
             using (Graphics g = preview.CreateGraphics())
             {
+                g.Clear(Color.Black);
+
                 //Renders each object in the list
                 foreach (object renderObject in renderObjects)
                 {
@@ -77,7 +79,14 @@ namespace osuThumb
 
                         Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
 
-                        g.DrawImage(bitmap, io.rect);
+                        Rectangle rect = new Rectangle(
+                            (int)(io.rect.Y * preview.Height),
+                            (int)(io.rect.X * preview.Width),
+                            (int)(io.rect.Width * preview.Width),
+                            (int)(io.rect.Height * preview.Height)
+                        );
+
+                        g.DrawImage(bitmap, rect);
                     }
                     else if (renderObject.GetType() == typeof(TextObject))
                     {
@@ -91,19 +100,30 @@ namespace osuThumb
                         }
                         else if (to.text == "%SR%")
                         {
-                            to.text = starBox.Text + "%";
+                            to.text = starBox.Text + "*";
                             to.text = to.text.Replace(',', '.');
                         }
 
                         SolidBrush brush = new SolidBrush(to.color);
-                        g.DrawString(to.text, font, brush,to.position);
+                        Font font = new Font(defaultFont.FontFamily, to.textSize == -1 ? defaultFont.Size : to.textSize);
+                        Point position = new Point(
+                            (int)(to.position.X * preview.Width),
+                            (int)(to.position.Y * preview.Height)
+                        );
+                        g.DrawString(to.text, font, brush, position);
                     }
                     else if (renderObject.GetType() == typeof(RectangleObject))
                     {
                         RectangleObject ro = (RectangleObject)renderObject;
 
                         SolidBrush brush = new SolidBrush(ro.color);
-                        g.FillRectangle(brush, ro.rect);
+                        Rectangle rect = new Rectangle(
+                            (int)(ro.rect.X * preview.Width),
+                            (int)(ro.rect.Y * preview.Height),
+                            (int)(ro.rect.Width * preview.Width),
+                            (int)(ro.rect.Height * preview.Height)
+                        );
+                        g.FillRectangle(brush, rect);
                     }
                 }
 
@@ -197,8 +217,8 @@ namespace osuThumb
                         string[] split = data[1].Split(',');
                         
 
-                        float x = float.Parse(split[0]);
-                        float y = float.Parse(split[1]);
+                        float x = float.Parse(split[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        float y = float.Parse(split[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
 
                         textObject.position = new PointF(x, y);
                     }
@@ -215,6 +235,13 @@ namespace osuThumb
                         int a = int.Parse(split[3]);
 
                         textObject.color = Color.FromArgb(a, r, g, b);
+                    }
+                    else if (noSpaces.StartsWith("font-size:"))
+                    {
+                        string[] data = line.Split(':');
+                        int size = int.Parse(data[1]);
+
+                        textObject.textSize = size;
                     }
 
                     //End object
@@ -234,13 +261,14 @@ namespace osuThumb
                         data[1] = data[1].Substring(2, data[1].Length - 3);
 
                         string[] split = data[1].Split(',');
+                        
 
-                        int x = int.Parse(split[0]);
-                        int y = int.Parse(split[1]);
-                        int w = split[2] == " %MAX%" ? preview.Width : int.Parse(split[2]);
-                        int h = split[2] == " %MAX%" ? preview.Height : int.Parse(split[3]);
+                        float x = float.Parse(split[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        float y = float.Parse(split[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        float w = float.Parse(split[2], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        float h = float.Parse(split[3], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
 
-                        rectangleObject.rect = new Rectangle(x, y, w, h);
+                        rectangleObject.rect = new RectangleF(x, y, w, h);
                     }
                     else if (noSpaces.StartsWith("color:"))
                     {
@@ -280,12 +308,12 @@ namespace osuThumb
 
                         string[] split = data[1].Split(',');
 
-                        int x = int.Parse(split[0]);
-                        int y = int.Parse(split[1]);
-                        int w = split[2] == " %MAX%" ? preview.Width : int.Parse(split[2]);
-                        int h = split[2] == " %MAX%" ? preview.Height : int.Parse(split[3]);
+                        float x = float.Parse(split[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        float y = float.Parse(split[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        float w = float.Parse(split[2], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        float h = float.Parse(split[3], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
 
-                        imageObject.rect = new Rectangle(x, y, w, h);
+                        imageObject.rect = new RectangleF(x, y, w, h);
                     }
                     else if (noSpaces.StartsWith("color:"))
                     {

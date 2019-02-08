@@ -11,7 +11,7 @@ namespace osuThumb
     {
         private Image _image;
         private string _path;
-        private Rectangle _rect;
+        private RectangleF _rect;
         private Color _color;
 
         public Image image
@@ -36,7 +36,7 @@ namespace osuThumb
                 _path = value;
             }
         }
-        public Rectangle rect
+        public RectangleF rect
         {
             get
             {
@@ -64,10 +64,10 @@ namespace osuThumb
         {
             this._image = null;
             this._path = "";
-            this._rect = new Rectangle(-1, -1, -1, -1);
-            this._color = Color.FromArgb(0, 0, 0, 0);
+            this._rect = new RectangleF(0, 0, 1, 1);
+            this._color = Color.FromArgb(255, 255, 255, 255);
         }
-        public ImageObject(string path, Rectangle rect, Color color)
+        public ImageObject(string path, RectangleF rect, Color color)
         {
             this._path = path;
             this._rect = rect;

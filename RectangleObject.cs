@@ -9,10 +9,10 @@ namespace osuThumb
 {
     class RectangleObject
     {
-        private Rectangle _rect;
+        private RectangleF _rect;
         private Color _color;
 
-        public Rectangle rect
+        public RectangleF rect
         {
             get
             {
@@ -38,10 +38,10 @@ namespace osuThumb
         //Constructor
         public RectangleObject ()
         {
-            this._rect = new Rectangle(-1, -1, -1, -1);
-            this._color = Color.FromArgb(0, 0, 0, 0);
+            this._rect = new RectangleF(0, 0, 1, 1);
+            this._color = Color.FromArgb(255, 255, 0, 255);
         }
-        public RectangleObject(Rectangle rect, Color color)
+        public RectangleObject(RectangleF rect, Color color)
         {
             this._rect = rect;
             this._color = color;

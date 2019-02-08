@@ -12,6 +12,7 @@ namespace osuThumb
         private string _text;
         private PointF _position;
         private Color _color;
+        private int _textSize;
 
         public string text
         {
@@ -46,19 +47,32 @@ namespace osuThumb
                 _color = value;
             }
         }
+        public int textSize
+        {
+            get
+            {
+                return _textSize;
+            }
+            set
+            {
+                _textSize = value;
+            }
+        }
 
         //Constructor
         public TextObject ()
         {
             this._text = "";
-            this._position = new PointF(-1, -1);
-            this._color = Color.FromArgb(0, 0, 0, 0);
+            this._position = new PointF(0, 0);
+            this._color = Color.FromArgb(255, 255, 255, 255);
+            this.textSize = -1;
         }
-        public TextObject(string text, PointF position, Color color)
+        public TextObject(string text, PointF position, Color color, int textSize)
         {
             this._text = text;
             this._position = position;
             this._color = color;
+            this.textSize = textSize;
         }
     }
 }
