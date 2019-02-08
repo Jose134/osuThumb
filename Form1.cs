@@ -91,17 +91,18 @@ namespace osuThumb
                     else if (renderObject.GetType() == typeof(TextObject))
                     {
                         TextObject to = (TextObject)renderObject;
+                        string text = to.text;
                         //Checks for variables in text property
                         if (to.text == "%ACC%")
                         {
                             float f_acc = float.Parse(accBox.Text);
-                            to.text = f_acc.ToString("0.00") + "%";
-                            to.text = to.text.Replace(',', '.');
+                            text = f_acc.ToString("0.00") + "%";
+                            text = text.Replace(',', '.');
                         }
                         else if (to.text == "%SR%")
                         {
-                            to.text = starBox.Text + "*";
-                            to.text = to.text.Replace(',', '.');
+                            text = starBox.Text + "*";
+                            text = text.Replace(',', '.');
                         }
 
                         SolidBrush brush = new SolidBrush(to.color);
@@ -110,7 +111,7 @@ namespace osuThumb
                             (int)(to.position.X * preview.Width),
                             (int)(to.position.Y * preview.Height)
                         );
-                        g.DrawString(to.text, font, brush, position);
+                        g.DrawString(text, font, brush, position);
                     }
                     else if (renderObject.GetType() == typeof(RectangleObject))
                     {
