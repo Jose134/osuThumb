@@ -112,7 +112,7 @@ namespace osuThumb
             {
                 string noSpaces = line.Replace(@"\s", "");
 
-                //Look for object start
+                //Looks for object start
                 if (line[0] == '{')
                 {
                     string[] data = line.Split(' ');
@@ -125,6 +125,37 @@ namespace osuThumb
                 if (current == "text")
                 {
                     //Looks for object properties
+                    if (noSpaces.StartsWith("text:"))
+                    {
+                        string[] data = line.Split(':');
+                        textObject.text = data[1].Substring(1, data[1].Length - 1);
+                    }
+                    else if (noSpaces.StartsWith("position:"))
+                    {
+                        string[] data = line.Split(':');
+                        data[1] = data[1].Substring(2, data[1].Length - 3);
+
+                        string[] split = data[1].Split(',');
+
+                        int x = int.Parse(split[0]);
+                        int y = int.Parse(split[1]);
+
+                        textObject.position = new Point(x, y);
+                    }
+                    else if (noSpaces.StartsWith("color:"))
+                    {
+                        string[] data = line.Split(':');
+                        data[1] = data[1].Substring(2, data[1].Length - 3);
+
+                        string[] split = data[1].Split(',');
+
+                        int r = int.Parse(split[0]);
+                        int g = int.Parse(split[1]);
+                        int b = int.Parse(split[2]);
+                        int a = int.Parse(split[3]);
+
+                        textObject.color = Color.FromArgb(a, r, g, b);
+                    }
 
                     //End object
                     if (noSpaces[0] == '}')
@@ -137,6 +168,34 @@ namespace osuThumb
                 else if (current == "rectangle")
                 {
                     //Looks for object properties
+                    if (noSpaces.StartsWith("rect:"))
+                    {
+                        string[] data = line.Split(':');
+                        data[1] = data[1].Substring(2, data[1].Length - 3);
+
+                        string[] split = data[1].Split(',');
+
+                        int x = int.Parse(split[0]);
+                        int y = int.Parse(split[1]);
+                        int w = int.Parse(split[2]);
+                        int h = int.Parse(split[3]);
+
+                        rectangleObject.rect = new Rectangle(x, y, w, h);
+                    }
+                    else if (noSpaces.StartsWith("color:"))
+                    {
+                        string[] data = line.Split(':');
+                        data[1] = data[1].Substring(2, data[1].Length - 3);
+
+                        string[] split = data[1].Split(',');
+
+                        int r = int.Parse(split[0]);
+                        int g = int.Parse(split[1]);
+                        int b = int.Parse(split[2]);
+                        int a = int.Parse(split[3]);
+
+                        imageObject.color = Color.FromArgb(a, r, g, b);
+                    }
 
                     //End object
                     if (noSpaces[0] == '}')
@@ -149,6 +208,39 @@ namespace osuThumb
                 else if (current == "image")
                 {
                     //Looks for object properties
+                    if (noSpaces.StartsWith("path:"))
+                    {
+                        string[] data = line.Split(':');
+                        imageObject.path = data[1].Substring(1, data[1].Length - 1);
+                    }
+                    else if (noSpaces.StartsWith("rect:"))
+                    {
+                        string[] data = line.Split(':');
+                        data[1] = data[1].Substring(2, data[1].Length - 3);
+
+                        string[] split = data[1].Split(',');
+
+                        int x = int.Parse(split[0]);
+                        int y = int.Parse(split[1]);
+                        int w = int.Parse(split[2]);
+                        int h = int.Parse(split[3]);
+
+                        imageObject.rect = new Rectangle(x, y, w, h);
+                    }
+                    else if (noSpaces.StartsWith("color:"))
+                    {
+                        string[] data = line.Split(':');
+                        data[1] = data[1].Substring(2, data[1].Length - 3);
+
+                        string[] split = data[1].Split(',');
+
+                        int r = int.Parse(split[0]);
+                        int g = int.Parse(split[1]);
+                        int b = int.Parse(split[2]);
+                        int a = int.Parse(split[3]);
+
+                        imageObject.color = Color.FromArgb(a, r, g, b);
+                    }
 
                     //End object
                     if (noSpaces[0] == '}')
