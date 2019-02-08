@@ -17,7 +17,7 @@ namespace osuThumb
         private string osuFolder = "";
         private string thumbFolder = "";
 
-        private List<object> renderObjects;
+        private List<object> renderObjects = new List<object>();
         private Font font = new Font("Arial", 24);
 
         public MainForm()
@@ -83,22 +83,37 @@ namespace osuThumb
 
             g.DrawString(starBox.Text + "*", test, fontBrush, new PointF());
             */
-
-            //Renders each object in the list
-            foreach (object renderObject in renderObjects)
+            using (Graphics g = preview.CreateGraphics())
             {
-                if (renderObject.GetType() == typeof(ImageObject))
+                //Renders each object in the list
+                foreach (object renderObject in renderObjects)
                 {
-                    ImageObject io = (ImageObject)renderObject;
+
+                    if (renderObject.GetType() == typeof(ImageObject))
+                    {
+                        ImageObject io = (ImageObject)renderObject;
+                        //Checks for variable in path property
+                        if (io.path == "%BG%")
+                        {
+                            io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
+                        }
+                        io.LoadImage();
+
+                        //TO DO: COLOR TINT
+
+
+                        g.DrawImage(io.image, io.rect);
+                    }
+                    else if (renderObject.GetType() == typeof(TextObject))
+                    {
+                        TextObject to = (TextObject)renderObject;
+                    }
+                    else if (renderObject.GetType() == typeof(RectangleObject))
+                    {
+                        RectangleObject ro = (RectangleObject)renderObject;
+                    }
                 }
-                else if (renderObject.GetType() == typeof(TextObject))
-                {
-                    TextObject to = (TextObject)renderObject;
-                }
-                else if (renderObject.GetType() == typeof(RectangleObject))
-                {
-                    RectangleObject ro = (RectangleObject)renderObject;
-                }
+
             }
         }
 
@@ -106,7 +121,7 @@ namespace osuThumb
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = false;
-            dialog.Filter = "LAYOUT|*.layout";
+            dialog.Filter = "Layout file|*.layout";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string filePath = dialog.FileName;
@@ -129,7 +144,10 @@ namespace osuThumb
             string line = "";
             while ((line = sr.ReadLine()) != null)
             {
-                string noSpaces = line.Replace(@"\s", "");
+                if (line == string.Empty) { continue; }
+
+                Console.WriteLine(line);
+                string noSpaces = line.Replace(" ", "");
 
                 //Looks for object start
                 if (line[0] == '{')
@@ -196,8 +214,8 @@ namespace osuThumb
 
                         int x = int.Parse(split[0]);
                         int y = int.Parse(split[1]);
-                        int w = int.Parse(split[2]);
-                        int h = int.Parse(split[3]);
+                        int w = split[2] == " %MAX%" ? preview.Width : int.Parse(split[2]);
+                        int h = split[2] == " %MAX%" ? preview.Height : int.Parse(split[3]);
 
                         rectangleObject.rect = new Rectangle(x, y, w, h);
                     }
@@ -213,7 +231,7 @@ namespace osuThumb
                         int b = int.Parse(split[2]);
                         int a = int.Parse(split[3]);
 
-                        imageObject.color = Color.FromArgb(a, r, g, b);
+                        rectangleObject.color = Color.FromArgb(a, r, g, b);
                     }
 
                     //End object
@@ -227,9 +245,12 @@ namespace osuThumb
                 else if (current == "image")
                 {
                     //Looks for object properties
+                    Console.WriteLine(noSpaces);
                     if (noSpaces.StartsWith("path:"))
                     {
                         string[] data = line.Split(':');
+                        Console.WriteLine(data[0]);
+                        Console.WriteLine(data[1]);
                         imageObject.path = data[1].Substring(1, data[1].Length - 1);
                     }
                     else if (noSpaces.StartsWith("rect:"))
@@ -241,8 +262,8 @@ namespace osuThumb
 
                         int x = int.Parse(split[0]);
                         int y = int.Parse(split[1]);
-                        int w = int.Parse(split[2]);
-                        int h = int.Parse(split[3]);
+                        int w = split[2] == " %MAX%" ? preview.Width : int.Parse(split[2]);
+                        int h = split[2] == " %MAX%" ? preview.Height : int.Parse(split[3]);
 
                         imageObject.rect = new Rectangle(x, y, w, h);
                     }
