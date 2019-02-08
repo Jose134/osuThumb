@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace osuThumb
 {
-    class ImageObject : RenderObject
+    class ImageObject
     {
         private Image _image;
         private string _path;
@@ -72,8 +72,13 @@ namespace osuThumb
             this._path = path;
             this._rect = rect;
             this._color = color;
-            
-            this._image = Bitmap.FromFile(_path);
+
+            LoadImage();
+        }
+
+        public void LoadImage ()
+        {
+            _image = Bitmap.FromFile(_path);
         }
     }
 }

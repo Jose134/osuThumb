@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace osuThumb
 {
-    class RectangleObject : RenderObject
+    class RectangleObject
     {
         private Rectangle _rect;
         private Color _color;

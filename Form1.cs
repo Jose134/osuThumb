@@ -17,7 +17,7 @@ namespace osuThumb
         private string osuFolder = "";
         private string thumbFolder = "";
 
-        private List<RenderObject> renderObjects;
+        private List<object> renderObjects;
         private Font font = new Font("Arial", 24);
 
         public MainForm()
@@ -27,7 +27,7 @@ namespace osuThumb
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            //Checks if required directories exist
             appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             osuFolder = appdataPath + @"\osu!";
 
@@ -47,6 +47,7 @@ namespace osuThumb
 
         private void fontButton_Click(object sender, EventArgs e)
         {
+            //Sets font using a FontDialog
             FontDialog fontDialog = new FontDialog();
             if (fontDialog.ShowDialog() == DialogResult.OK)
             {
@@ -56,13 +57,14 @@ namespace osuThumb
 
         private void generateButton_Click(object sender, EventArgs e)
         {
+            /*
             string bgPath = thumbFolder + @"\" + idBox.Text + "l.jpg";
             if (!File.Exists(bgPath))
             {
                 MessageBox.Show("ERROR: Couldn't find background image, is id correct?", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            
             Image bgImg = Bitmap.FromFile(bgPath);
 
             Graphics g = preview.CreateGraphics();
@@ -80,7 +82,24 @@ namespace osuThumb
             g.DrawString(acc + "%", font, fontBrush, new PointF(30, 30));
 
             g.DrawString(starBox.Text + "*", test, fontBrush, new PointF());
-            
+            */
+
+            //Renders each object in the list
+            foreach (object renderObject in renderObjects)
+            {
+                if (renderObject.GetType() == typeof(ImageObject))
+                {
+                    ImageObject io = (ImageObject)renderObject;
+                }
+                else if (renderObject.GetType() == typeof(TextObject))
+                {
+                    TextObject to = (TextObject)renderObject;
+                }
+                else if (renderObject.GetType() == typeof(RectangleObject))
+                {
+                    RectangleObject ro = (RectangleObject)renderObject;
+                }
+            }
         }
 
         private void loadButton_Click(object sender, EventArgs e)

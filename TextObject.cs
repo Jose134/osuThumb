@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace osuThumb
 {
-    class TextObject : RenderObject
+    class TextObject
     {
         private string _text;
         private Point _position;
