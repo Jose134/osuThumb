@@ -20,12 +20,20 @@ namespace osuThumb
             {
                 return _image;
             }
+            set
+            {
+                _image = value;
+            }
         }
         public string path
         {
             get
             {
                 return _path;
+            }
+            set
+            {
+                _path = value;
             }
         }
         public Rectangle rect
@@ -34,6 +42,10 @@ namespace osuThumb
             {
                 return _rect;
             }
+            set
+            {
+                _rect = value;
+            }
         }
         public Color color
         {
@@ -41,9 +53,20 @@ namespace osuThumb
             {
                 return _color;
             }
+            set
+            {
+                _color = value;
+            }
         }
 
         //Constructor
+        public ImageObject ()
+        {
+            this._image = null;
+            this._path = "";
+            this._rect = new Rectangle(-1, -1, -1, -1);
+            this._color = Color.FromArgb(0, 0, 0, 0);
+        }
         public ImageObject(string path, Rectangle rect, Color color)
         {
             this._path = path;

@@ -10,5 +10,6 @@ namespace osuThumb
     abstract class RenderObject
     {
         //I just wanted the class to group my different Objects :C
+        
     }
 }

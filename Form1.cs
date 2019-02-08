@@ -102,10 +102,62 @@ namespace osuThumb
 
             StreamReader sr = new StreamReader(filePath);
 
+            string current = "";
+
+            TextObject textObject = null;
+            RectangleObject rectangleObject = null;
+            ImageObject imageObject = null;
             string line = "";
             while ((line = sr.ReadLine()) != null)
             {
+                string noSpaces = line.Replace(@"\s", "");
 
+                //Look for object start
+                if (line[0] == '{')
+                {
+                    string[] data = line.Split(' ');
+
+                    if (data[1] == "text")           { current = "text";      textObject = new TextObject();           }
+                    else if (data[1] == "rectangle") { current = "rectangle"; rectangleObject = new RectangleObject(); }
+                    else if (data[1] == "image")     { current = "image";     imageObject = new ImageObject();         }
+                }
+
+                if (current == "text")
+                {
+                    //Looks for object properties
+
+                    //End object
+                    if (noSpaces[0] == '}')
+                    {
+                        renderObjects.Add(textObject);
+                        textObject = null;
+                        current = "";
+                    }
+                }
+                else if (current == "rectangle")
+                {
+                    //Looks for object properties
+
+                    //End object
+                    if (noSpaces[0] == '}')
+                    {
+                        renderObjects.Add(rectangleObject);
+                        rectangleObject = null;
+                        current = "";
+                    }
+                }
+                else if (current == "image")
+                {
+                    //Looks for object properties
+
+                    //End object
+                    if (noSpaces[0] == '}')
+                    {
+                        renderObjects.Add(imageObject);
+                        imageObject = null;
+                        current = "";
+                    }
+                }
             }
         }
     }
