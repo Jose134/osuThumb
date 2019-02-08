@@ -10,7 +10,7 @@ namespace osuThumb
     class TextObject
     {
         private string _text;
-        private Point _position;
+        private PointF _position;
         private Color _color;
 
         public string text
@@ -24,7 +24,7 @@ namespace osuThumb
                 _text = value;
             }
         }
-        public Point position
+        public PointF position
         {
             get
             {
@@ -51,10 +51,10 @@ namespace osuThumb
         public TextObject ()
         {
             this._text = "";
-            this._position = new Point(-1, -1);
+            this._position = new PointF(-1, -1);
             this._color = Color.FromArgb(0, 0, 0, 0);
         }
-        public TextObject(string text, Point position, Color color)
+        public TextObject(string text, PointF position, Color color)
         {
             this._text = text;
             this._position = position;

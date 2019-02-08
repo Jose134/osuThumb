@@ -114,12 +114,13 @@ namespace osuThumb
         {
             BitmapData data = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             byte[] pixelBuffer = new byte[data.Stride * data.Height];
+            Marshal.Copy(data.Scan0, pixelBuffer, 0, pixelBuffer.Length);
 
             float r, g, b;
             for (int i = 0; (i + 4) < pixelBuffer.Length; i += 4) {
-                b = pixelBuffer[i]   + (255 - pixelBuffer[i])   * ((float)tint.B / 255);
-                g = pixelBuffer[i+1] + (255 - pixelBuffer[i+1]) * ((float)tint.G / 255);
-                r = pixelBuffer[i+2] + (255 - pixelBuffer[i+2]) * ((float)tint.R / 255);
+                b = pixelBuffer[i]   * ((float)tint.B / 255);
+                g = pixelBuffer[i+1] * ((float)tint.G / 255);
+                r = pixelBuffer[i+2] * ((float)tint.R / 255);
 
                 if (b > 255) { b = 255; }
                 if (g > 255) { g = 255; }
@@ -194,11 +195,12 @@ namespace osuThumb
                         data[1] = data[1].Substring(2, data[1].Length - 3);
 
                         string[] split = data[1].Split(',');
+                        
 
-                        int x = int.Parse(split[0]);
-                        int y = int.Parse(split[1]);
+                        float x = float.Parse(split[0]);
+                        float y = float.Parse(split[1]);
 
-                        textObject.position = new Point(x, y);
+                        textObject.position = new PointF(x, y);
                     }
                     else if (noSpaces.StartsWith("color:"))
                     {
@@ -309,6 +311,9 @@ namespace osuThumb
                     }
                 }
             }
+
+            sr.Close();
+            sr.Dispose();
         }
     }
 }
