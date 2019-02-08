@@ -92,7 +92,7 @@ namespace osuThumb
                     if (renderObject.GetType() == typeof(ImageObject))
                     {
                         ImageObject io = (ImageObject)renderObject;
-                        //Checks for variable in path property
+                        //Checks for variables in path property
                         if (io.path == "%BG%")
                         {
                             io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
@@ -107,10 +107,23 @@ namespace osuThumb
                     else if (renderObject.GetType() == typeof(TextObject))
                     {
                         TextObject to = (TextObject)renderObject;
+                        //Checks for variables in text property
+                        if (to.text == "%ACC%")
+                        {
+                            float f_acc = float.Parse(accBox.Text);
+                            to.text = f_acc.ToString("0.00") + "%";
+                            to.text = to.text.Replace(',', '.');
+                        }
+
+                        SolidBrush brush = new SolidBrush(to.color);
+                        g.DrawString(to.text, font, brush,to.position);
                     }
                     else if (renderObject.GetType() == typeof(RectangleObject))
                     {
                         RectangleObject ro = (RectangleObject)renderObject;
+
+                        SolidBrush brush = new SolidBrush(ro.color);
+                        g.FillRectangle(brush, ro.rect);
                     }
                 }
 
@@ -245,12 +258,9 @@ namespace osuThumb
                 else if (current == "image")
                 {
                     //Looks for object properties
-                    Console.WriteLine(noSpaces);
                     if (noSpaces.StartsWith("path:"))
                     {
                         string[] data = line.Split(':');
-                        Console.WriteLine(data[0]);
-                        Console.WriteLine(data[1]);
                         imageObject.path = data[1].Substring(1, data[1].Length - 1);
                     }
                     else if (noSpaces.StartsWith("rect:"))
