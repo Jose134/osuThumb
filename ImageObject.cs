@@ -86,6 +86,9 @@ namespace osuThumb
             this._rect = rect;
             this._color = color;
             this._canvasSize = canvasSize;
+            this._canvasSize = canvasSize;
+            this._canvasSize = canvasSize;
+            this._canvasSize = canvasSize;
 
             LoadImage();
         }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -21,6 +22,8 @@ namespace osuThumb
 
         private List<object> renderObjects = new List<object>();
         private Font defaultFont = new Font("Arial", 24);
+
+        private Bitmap render;
 
         public MainForm()
         {
@@ -60,88 +63,99 @@ namespace osuThumb
         //THUMBNAIL GENERATOR
         private void generateButton_Click(object sender, EventArgs e)
         {
-            using (Graphics g = preview.CreateGraphics())
+            using (Bitmap bmp = new Bitmap(480, 360))
             {
-                g.Clear(Color.Black);
-
-                //Renders each object in the list
-                foreach (object renderObject in renderObjects)
+                using (Graphics g = Graphics.FromImage(bmp))
                 {
+                    g.Clear(Color.Black);
 
-                    if (renderObject.GetType() == typeof(ImageObject))
+                    //Renders each object in the list
+                    foreach (object renderObject in renderObjects)
                     {
-                        ImageObject io = (ImageObject)renderObject;
-                        //Checks for variables in path property
-                        string save = io.path;
-                        if (io.path == "%BG%")
-                        {
-                            io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
-                            save = "%BG%";
-                        }
-                        else if (io.path == "%RANKING%")
-                        {
-                            io.path = "res/ranking/ranking-" + rankingBox.Text.ToLower() + ".png";
-                            save = "%RANKING%";
-                        }
-                        else if (io.path == "%MODS%")
-                        {
-                            io.path = "res/mods/selection-mod-doubletime" + ".png";
-                            save = "%MODS%";
-                        }
-                        io.LoadImage();
-                        io.path = save;
 
-                        Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
-
-                        Rectangle rect = new Rectangle(
-                            (int)(io.rect.Y * preview.Height),
-                            (int)(io.rect.X * preview.Width),
-                            (int)(io.rect.Width * (io.canvasSize ? preview.Width : bitmap.Width)),
-                            (int)(io.rect.Height * (io.canvasSize ? preview.Width : bitmap.Height))
-                        );
-
-                        g.DrawImage(bitmap, rect);
-                    }
-                    else if (renderObject.GetType() == typeof(TextObject))
-                    {
-                        TextObject to = (TextObject)renderObject;
-                        string text = to.text;
-                        //Checks for variables in text property
-                        if (to.text == "%ACC%")
+                        if (renderObject.GetType() == typeof(ImageObject))
                         {
-                            float f_acc = float.Parse(accBox.Text);
-                            text = f_acc.ToString("0.00") + "%";
-                            text = text.Replace(',', '.');
+                            ImageObject io = (ImageObject)renderObject;
+                            //Checks for variables in path property
+                            string save = io.path;
+                            if (io.path == "%BG%")
+                            {
+                                io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
+                                save = "%BG%";
+                            }
+                            else if (io.path == "%RANKING%")
+                            {
+                                io.path = "res/ranking/ranking-" + rankingBox.Text.ToLower() + ".png";
+                                save = "%RANKING%";
+                            }
+                            else if (io.path == "%MODS%")
+                            {
+                                io.path = "res/mods/selection-mod-doubletime" + ".png";
+                                save = "%MODS%";
+                            }
+                            //恋は渾沌の隷也　歌詞付き
+                            io.LoadImage();
+                            io.path = save;
+
+                            Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
+
+                            Rectangle rect = new Rectangle(
+                                (int)(io.rect.X * bmp.Height),
+                                (int)(io.rect.Y * bmp.Width),
+                                (int)(io.rect.Width * (io.canvasSize ? bmp.Width : bitmap.Width)),
+                                (int)(io.rect.Height * (io.canvasSize ? bmp.Width : bitmap.Height))
+                            );
+
+                            g.DrawImage(bitmap, rect);
                         }
-                        else if (to.text == "%SR%")
+                        else if (renderObject.GetType() == typeof(TextObject))
                         {
-                            text = starBox.Text + "*";
-                            text = text.Replace(',', '.');
+                            TextObject to = (TextObject)renderObject;
+                            string text = to.text;
+                            //Checks for variables in text property
+                            if (to.text == "%ACC%")
+                            {
+                                float f_acc = float.Parse(accBox.Text);
+                                text = f_acc.ToString("0.00") + "%";
+                                text = text.Replace(',', '.');
+                            }
+                            else if (to.text == "%SR%")
+                            {
+                                text = starBox.Text + "*";
+                                text = text.Replace(',', '.');
+                            }
+
+                            SolidBrush brush = new SolidBrush(to.color);
+                            Font font = new Font(defaultFont.FontFamily, to.textSize == -1 ? defaultFont.Size : to.textSize);
+                            Point position = new Point(
+                                (int)(to.position.X * bmp.Width),
+                                (int)(to.position.Y * bmp.Height)
+                            );
+                            g.DrawString(text, font, brush, position);
                         }
+                        else if (renderObject.GetType() == typeof(RectangleObject))
+                        {
+                            RectangleObject ro = (RectangleObject)renderObject;
 
-                        SolidBrush brush = new SolidBrush(to.color);
-                        Font font = new Font(defaultFont.FontFamily, to.textSize == -1 ? defaultFont.Size : to.textSize);
-                        Point position = new Point(
-                            (int)(to.position.X * preview.Width),
-                            (int)(to.position.Y * preview.Height)
-                        );
-                        g.DrawString(text, font, brush, position);
-                    }
-                    else if (renderObject.GetType() == typeof(RectangleObject))
-                    {
-                        RectangleObject ro = (RectangleObject)renderObject;
-
-                        SolidBrush brush = new SolidBrush(ro.color);
-                        Rectangle rect = new Rectangle(
-                            (int)(ro.rect.X * preview.Width),
-                            (int)(ro.rect.Y * preview.Height),
-                            (int)(ro.rect.Width * preview.Width),
-                            (int)(ro.rect.Height * preview.Height)
-                        );
-                        g.FillRectangle(brush, rect);
+                            SolidBrush brush = new SolidBrush(ro.color);
+                            Rectangle rect = new Rectangle(
+                                (int)(ro.rect.X * bmp.Width),
+                                (int)(ro.rect.Y * bmp.Height),
+                                (int)(ro.rect.Width * bmp.Width),
+                                (int)(ro.rect.Height * bmp.Height)
+                            );
+                            g.FillRectangle(brush, rect);
+                        }
                     }
                 }
 
+                render = (Bitmap)bmp.Clone();
+                render.Save("thumb.bmp");
+            }
+
+            using (Graphics g = preview.CreateGraphics())
+            {
+                g.DrawImage(render, 0, 0, preview.Width, preview.Height);
             }
         }
 
@@ -368,6 +382,15 @@ namespace osuThumb
 
             sr.Close();
             sr.Dispose();
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists("export"))
+            {
+                Directory.CreateDirectory("export");
+            }
+            render.Save("export/thumb.bmp");
         }
     }
 }

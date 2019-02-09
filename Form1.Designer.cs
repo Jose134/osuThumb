@@ -40,6 +40,9 @@
             this.loadButton = new System.Windows.Forms.Button();
             this.rankingBox = new System.Windows.Forms.TextBox();
             this.rankingLabel = new System.Windows.Forms.Label();
+            this.modsBox = new System.Windows.Forms.TextBox();
+            this.modsLabel = new System.Windows.Forms.Label();
+            this.saveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // preview
@@ -51,7 +54,7 @@
             // 
             // generateButton
             // 
-            this.generateButton.Location = new System.Drawing.Point(498, 349);
+            this.generateButton.Location = new System.Drawing.Point(501, 320);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(290, 23);
             this.generateButton.TabIndex = 1;
@@ -93,9 +96,9 @@
             // 
             // fontButton
             // 
-            this.fontButton.Location = new System.Drawing.Point(501, 320);
+            this.fontButton.Location = new System.Drawing.Point(501, 291);
             this.fontButton.Name = "fontButton";
-            this.fontButton.Size = new System.Drawing.Size(287, 23);
+            this.fontButton.Size = new System.Drawing.Size(290, 23);
             this.fontButton.TabIndex = 6;
             this.fontButton.Text = "Select Font";
             this.fontButton.UseVisualStyleBackColor = true;
@@ -119,10 +122,10 @@
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(501, 291);
+            this.loadButton.Location = new System.Drawing.Point(501, 262);
             this.loadButton.Name = "loadButton";
             this.loadButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.loadButton.Size = new System.Drawing.Size(287, 23);
+            this.loadButton.Size = new System.Drawing.Size(290, 23);
             this.loadButton.TabIndex = 9;
             this.loadButton.Text = "Load Layout";
             this.loadButton.UseVisualStyleBackColor = true;
@@ -144,11 +147,40 @@
             this.rankingLabel.TabIndex = 10;
             this.rankingLabel.Text = "Ranking";
             // 
+            // modsBox
+            // 
+            this.modsBox.Location = new System.Drawing.Point(578, 118);
+            this.modsBox.Name = "modsBox";
+            this.modsBox.Size = new System.Drawing.Size(210, 20);
+            this.modsBox.TabIndex = 13;
+            // 
+            // modsLabel
+            // 
+            this.modsLabel.AutoSize = true;
+            this.modsLabel.Location = new System.Drawing.Point(539, 121);
+            this.modsLabel.Name = "modsLabel";
+            this.modsLabel.Size = new System.Drawing.Size(33, 13);
+            this.modsLabel.TabIndex = 12;
+            this.modsLabel.Text = "Mods";
+            // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(501, 349);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(290, 23);
+            this.saveButton.TabIndex = 14;
+            this.saveButton.Text = "Export Image";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 390);
+            this.Controls.Add(this.saveButton);
+            this.Controls.Add(this.modsBox);
+            this.Controls.Add(this.modsLabel);
             this.Controls.Add(this.rankingBox);
             this.Controls.Add(this.rankingLabel);
             this.Controls.Add(this.loadButton);
@@ -183,6 +215,9 @@
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.TextBox rankingBox;
         private System.Windows.Forms.Label rankingLabel;
+        private System.Windows.Forms.TextBox modsBox;
+        private System.Windows.Forms.Label modsLabel;
+        private System.Windows.Forms.Button saveButton;
     }
 }
 
