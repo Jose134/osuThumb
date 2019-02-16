@@ -13,14 +13,15 @@ you create an object like this
   property2: value\
   ...\
   propertyN: value\
-}\
+}
+
 
 Objects will be drawn in order so the one at the bottom of the file will be the last one drawn
 
 There are currently 3 Object types:\
 **image**\
 **text**\
-**rectangle**\
+**rectangle**
 
 
 
