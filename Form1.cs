@@ -16,10 +16,12 @@ namespace osuThumb
 {
     public partial class MainForm : Form
     {
+        //Folder variables
         private string appdataPath = "";
         private string osuFolder = "";
         private string thumbFolder = "";
 
+        //Drawing variables
         private List<object> renderObjects = new List<object>();
         private Font defaultFont = new Font("Arial", 24);
 
@@ -50,6 +52,7 @@ namespace osuThumb
             }
         }
 
+        //Changes the default font
         private void fontButton_Click(object sender, EventArgs e)
         {
             //Sets font using a FontDialog
@@ -85,7 +88,7 @@ namespace osuThumb
                             }
                             else if (io.path == "%RANKING%")
                             {
-                                io.path = "res/ranking/ranking-" + rankingBox.Text.ToLower() + ".png";
+                                io.path = "res/ranking/ranking-" + "A".ToLower() + ".png";
                                 save = "%RANKING%";
                             }
                             else if (io.path == "%MODS%")
@@ -93,7 +96,7 @@ namespace osuThumb
                                 io.path = "res/mods/selection-mod-doubletime" + ".png";
                                 save = "%MODS%";
                             }
-                            //恋は渾沌の隷也　歌詞付き
+                            
                             io.LoadImage();
                             io.path = save;
 
@@ -115,13 +118,13 @@ namespace osuThumb
                             //Checks for variables in text property
                             if (to.text == "%ACC%")
                             {
-                                float f_acc = float.Parse(accBox.Text);
+                                float f_acc = float.Parse("owo");
                                 text = f_acc.ToString("0.00") + "%";
                                 text = text.Replace(',', '.');
                             }
                             else if (to.text == "%SR%")
                             {
-                                text = starBox.Text + "*";
+                                text = "uwu" + "*";
                                 text = text.Replace(',', '.');
                             }
 
@@ -159,6 +162,7 @@ namespace osuThumb
             }
         }
 
+        //Creates a tinted Bitmap
         private Bitmap ColorTint (Bitmap src, Color tint)
         {
             BitmapData data = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
@@ -192,9 +196,11 @@ namespace osuThumb
         //LAYOUT LOADER
         private void loadButton_Click(object sender, EventArgs e)
         {
+            //Creates a OpenFileDialog
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = false;
             dialog.Filter = "Layout file|*.layout";
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string filePath = dialog.FileName;
@@ -203,6 +209,7 @@ namespace osuThumb
 
         }
 
+        //Reads a layout file adding elements to the renderObjects List
         private void LoadLayout (string filePath)
         {
             if (!File.Exists(filePath)) { return; }
@@ -214,6 +221,10 @@ namespace osuThumb
             TextObject textObject = null;
             RectangleObject rectangleObject = null;
             ImageObject imageObject = null;
+            renderObjects.Clear();
+
+            int customPropertyCount = 0;
+
             string line = "";
             while ((line = sr.ReadLine()) != null)
             {
@@ -238,6 +249,29 @@ namespace osuThumb
                     {
                         string[] data = noSpaces.Split(':');
                         textObject.text = data[1];
+
+                        //PropertyGenerator
+                        if ((textObject.text[0] == '%') && (textObject.text[textObject.text.Length - 1] == '%'))
+                        {
+                            string propertyName = textObject.text.Substring(1, textObject.text.Length - 2);
+
+                            Label propertyLabel = new System.Windows.Forms.Label();
+                            propertyLabel.Name = "customPropertyLabel_" + propertyName;
+                            propertyLabel.Location = new System.Drawing.Point(80 - textObject.text.Length * 8 , 43 * (customPropertyCount + 1));
+                            propertyLabel.Size = new System.Drawing.Size(textObject.text.Length * 8, 13);
+                            propertyLabel.Text = propertyName;
+
+                            TextBox propertyBox = new System.Windows.Forms.TextBox();
+                            propertyBox.Name = "customPropertyBox_" + propertyName;
+                            propertyBox.Location = new System.Drawing.Point(80, 40 * (customPropertyCount + 1));
+                            propertyBox.Size = new System.Drawing.Size(150, 20);
+                            propertyBox.TabIndex = 13;
+
+                            this.propertiesPanel.Controls.Add(propertyLabel);
+                            this.propertiesPanel.Controls.Add(propertyBox);
+
+                            customPropertyCount++;
+                        }
                     }
                     else if (noSpaces.StartsWith("position:"))
                     {
@@ -384,13 +418,23 @@ namespace osuThumb
             sr.Dispose();
         }
 
+        //Exports the image
         private void saveButton_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists("export"))
             {
                 Directory.CreateDirectory("export");
             }
-            render.Save("export/thumb.bmp");
+
+            int number = 0;
+            string filename = "";
+            do
+            {
+                filename = "export/" + idBox.Text + "_thumb + _" + number + ".jpg";
+                number++;
+            } while (File.Exists(filename));
+
+            render.Save(filename, ImageFormat.Jpeg);
         }
     }
 }

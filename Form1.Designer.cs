@@ -32,17 +32,10 @@
             this.generateButton = new System.Windows.Forms.Button();
             this.idBox = new System.Windows.Forms.TextBox();
             this.idLabel = new System.Windows.Forms.Label();
-            this.accLabel = new System.Windows.Forms.Label();
-            this.accBox = new System.Windows.Forms.TextBox();
             this.fontButton = new System.Windows.Forms.Button();
-            this.starBox = new System.Windows.Forms.TextBox();
-            this.starLabel = new System.Windows.Forms.Label();
             this.loadButton = new System.Windows.Forms.Button();
-            this.rankingBox = new System.Windows.Forms.TextBox();
-            this.rankingLabel = new System.Windows.Forms.Label();
-            this.modsBox = new System.Windows.Forms.TextBox();
-            this.modsLabel = new System.Windows.Forms.Label();
             this.saveButton = new System.Windows.Forms.Button();
+            this.propertiesPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // preview
@@ -78,22 +71,6 @@
             this.idLabel.TabIndex = 3;
             this.idLabel.Text = "Beatmapset id";
             // 
-            // accLabel
-            // 
-            this.accLabel.AutoSize = true;
-            this.accLabel.Location = new System.Drawing.Point(520, 43);
-            this.accLabel.Name = "accLabel";
-            this.accLabel.Size = new System.Drawing.Size(52, 13);
-            this.accLabel.TabIndex = 4;
-            this.accLabel.Text = "Accuracy";
-            // 
-            // accBox
-            // 
-            this.accBox.Location = new System.Drawing.Point(578, 40);
-            this.accBox.Name = "accBox";
-            this.accBox.Size = new System.Drawing.Size(210, 20);
-            this.accBox.TabIndex = 5;
-            // 
             // fontButton
             // 
             this.fontButton.Location = new System.Drawing.Point(501, 291);
@@ -103,22 +80,6 @@
             this.fontButton.Text = "Select Font";
             this.fontButton.UseVisualStyleBackColor = true;
             this.fontButton.Click += new System.EventHandler(this.fontButton_Click);
-            // 
-            // starBox
-            // 
-            this.starBox.Location = new System.Drawing.Point(578, 66);
-            this.starBox.Name = "starBox";
-            this.starBox.Size = new System.Drawing.Size(210, 20);
-            this.starBox.TabIndex = 8;
-            // 
-            // starLabel
-            // 
-            this.starLabel.AutoSize = true;
-            this.starLabel.Location = new System.Drawing.Point(512, 69);
-            this.starLabel.Name = "starLabel";
-            this.starLabel.Size = new System.Drawing.Size(60, 13);
-            this.starLabel.TabIndex = 7;
-            this.starLabel.Text = "Star Rating";
             // 
             // loadButton
             // 
@@ -131,38 +92,6 @@
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
-            // rankingBox
-            // 
-            this.rankingBox.Location = new System.Drawing.Point(578, 92);
-            this.rankingBox.Name = "rankingBox";
-            this.rankingBox.Size = new System.Drawing.Size(210, 20);
-            this.rankingBox.TabIndex = 11;
-            // 
-            // rankingLabel
-            // 
-            this.rankingLabel.AutoSize = true;
-            this.rankingLabel.Location = new System.Drawing.Point(525, 95);
-            this.rankingLabel.Name = "rankingLabel";
-            this.rankingLabel.Size = new System.Drawing.Size(47, 13);
-            this.rankingLabel.TabIndex = 10;
-            this.rankingLabel.Text = "Ranking";
-            // 
-            // modsBox
-            // 
-            this.modsBox.Location = new System.Drawing.Point(578, 118);
-            this.modsBox.Name = "modsBox";
-            this.modsBox.Size = new System.Drawing.Size(210, 20);
-            this.modsBox.TabIndex = 13;
-            // 
-            // modsLabel
-            // 
-            this.modsLabel.AutoSize = true;
-            this.modsLabel.Location = new System.Drawing.Point(539, 121);
-            this.modsLabel.Name = "modsLabel";
-            this.modsLabel.Size = new System.Drawing.Size(33, 13);
-            this.modsLabel.TabIndex = 12;
-            this.modsLabel.Text = "Mods";
-            // 
             // saveButton
             // 
             this.saveButton.Location = new System.Drawing.Point(501, 349);
@@ -173,22 +102,23 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
+            // propertiesPanel
+            // 
+            this.propertiesPanel.AutoScroll = true;
+            this.propertiesPanel.Location = new System.Drawing.Point(498, 38);
+            this.propertiesPanel.Name = "propertiesPanel";
+            this.propertiesPanel.Size = new System.Drawing.Size(293, 218);
+            this.propertiesPanel.TabIndex = 15;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 390);
+            this.Controls.Add(this.propertiesPanel);
             this.Controls.Add(this.saveButton);
-            this.Controls.Add(this.modsBox);
-            this.Controls.Add(this.modsLabel);
-            this.Controls.Add(this.rankingBox);
-            this.Controls.Add(this.rankingLabel);
             this.Controls.Add(this.loadButton);
-            this.Controls.Add(this.starBox);
-            this.Controls.Add(this.starLabel);
             this.Controls.Add(this.fontButton);
-            this.Controls.Add(this.accBox);
-            this.Controls.Add(this.accLabel);
             this.Controls.Add(this.idLabel);
             this.Controls.Add(this.idBox);
             this.Controls.Add(this.generateButton);
@@ -207,17 +137,10 @@
         private System.Windows.Forms.Button generateButton;
         private System.Windows.Forms.TextBox idBox;
         private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Label accLabel;
-        private System.Windows.Forms.TextBox accBox;
         private System.Windows.Forms.Button fontButton;
-        private System.Windows.Forms.TextBox starBox;
-        private System.Windows.Forms.Label starLabel;
         private System.Windows.Forms.Button loadButton;
-        private System.Windows.Forms.TextBox rankingBox;
-        private System.Windows.Forms.Label rankingLabel;
-        private System.Windows.Forms.TextBox modsBox;
-        private System.Windows.Forms.Label modsLabel;
         private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Panel propertiesPanel;
     }
 }
 
