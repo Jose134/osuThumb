@@ -63,6 +63,8 @@ namespace osuThumb
             }
         }
 
+        #region Thumbnail Generation
+
         //THUMBNAIL GENERATOR
         private void generateButton_Click(object sender, EventArgs e)
         {
@@ -115,17 +117,22 @@ namespace osuThumb
                         {
                             TextObject to = (TextObject)renderObject;
                             string text = to.text;
-                            //Checks for variables in text property
-                            if (to.text == "%ACC%")
+
+                            //Checks for custom text variables
+                            if ((to.text[0] == '%') && (to.text[to.text.Length - 1] == '%'))
                             {
-                                float f_acc = float.Parse("owo");
-                                text = f_acc.ToString("0.00") + "%";
-                                text = text.Replace(',', '.');
-                            }
-                            else if (to.text == "%SR%")
-                            {
-                                text = "uwu" + "*";
-                                text = text.Replace(',', '.');
+                                string propertyName = to.text.Substring(1, to.text.Length - 2);
+
+                                foreach (Control c in propertiesPanel.Controls)
+                                {
+                                    if (c.GetType() == typeof(TextBox))
+                                    {
+                                        if (c.Name == "customPropertyBox_" + propertyName)
+                                        {
+                                            text = c.Text;
+                                        }
+                                    }
+                                }
                             }
 
                             SolidBrush brush = new SolidBrush(to.color);
@@ -193,6 +200,10 @@ namespace osuThumb
             return result;
         }
 
+        #endregion
+
+        #region Layout
+
         //LAYOUT LOADER
         private void loadButton_Click(object sender, EventArgs e)
         {
@@ -257,13 +268,13 @@ namespace osuThumb
 
                             Label propertyLabel = new System.Windows.Forms.Label();
                             propertyLabel.Name = "customPropertyLabel_" + propertyName;
-                            propertyLabel.Location = new System.Drawing.Point(80 - textObject.text.Length * 8 , 43 * (customPropertyCount + 1));
+                            propertyLabel.Location = new System.Drawing.Point(80 - textObject.text.Length * 8 , 25 * (customPropertyCount + 1) + 5);
                             propertyLabel.Size = new System.Drawing.Size(textObject.text.Length * 8, 13);
                             propertyLabel.Text = propertyName;
 
                             TextBox propertyBox = new System.Windows.Forms.TextBox();
                             propertyBox.Name = "customPropertyBox_" + propertyName;
-                            propertyBox.Location = new System.Drawing.Point(80, 40 * (customPropertyCount + 1));
+                            propertyBox.Location = new System.Drawing.Point(80, 25 * (customPropertyCount + 1));
                             propertyBox.Size = new System.Drawing.Size(150, 20);
                             propertyBox.TabIndex = 13;
 
@@ -418,6 +429,8 @@ namespace osuThumb
             sr.Dispose();
         }
 
+        #endregion
+
         //Exports the image
         private void saveButton_Click(object sender, EventArgs e)
         {
@@ -436,5 +449,6 @@ namespace osuThumb
 
             render.Save(filename, ImageFormat.Jpeg);
         }
+
     }
 }
