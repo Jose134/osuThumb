@@ -105,23 +105,6 @@ namespace osuThumb
                                     }
                                 }
                             }
-                            /*
-                            string save = io.path;
-                            if (io.path == "%BG%")
-                            {
-                                io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
-                                save = "%BG%";
-                            }
-                            else if (io.path == "%RANKING%")
-                            {
-                                io.path = "res/ranking/ranking-" + "A".ToLower() + ".png";
-                                save = "%RANKING%";
-                            }
-                            else if (io.path == "%MODS%")
-                            {
-                                io.path = "res/mods/selection-mod-doubletime" + ".png";
-                                save = "%MODS%";
-                            }*/
                             
                             io.LoadImage();
                             io.path = save;
@@ -129,10 +112,10 @@ namespace osuThumb
                             Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
 
                             Rectangle rect = new Rectangle(
-                                (int)(io.rect.X * bmp.Height),
-                                (int)(io.rect.Y * bmp.Width),
-                                (int)(io.rect.Width * (io.canvasSize ? bmp.Width : bitmap.Width)),
-                                (int)(io.rect.Height * (io.canvasSize ? bmp.Width : bitmap.Height))
+                                (int)(io.rect.X * (io.canvasRelative ? bmp.Width : 1)),
+                                (int)(io.rect.Y * (io.canvasRelative ? bmp.Width : 1)),
+                                (int)(io.rect.Width * (io.canvasRelative ? bmp.Width : bitmap.Width)),
+                                (int)(io.rect.Height * (io.canvasRelative ? bmp.Width : bitmap.Height))
                             );
 
                             g.DrawImage(bitmap, rect);
@@ -173,10 +156,10 @@ namespace osuThumb
 
                             SolidBrush brush = new SolidBrush(ro.color);
                             Rectangle rect = new Rectangle(
-                                (int)(ro.rect.X * bmp.Width),
-                                (int)(ro.rect.Y * bmp.Height),
-                                (int)(ro.rect.Width * bmp.Width),
-                                (int)(ro.rect.Height * bmp.Height)
+                                (int)(ro.rect.X * (ro.canvasRelative ? bmp.Width : 1)),
+                                (int)(ro.rect.Y * (ro.canvasRelative ? bmp.Height : 1)),
+                                (int)(ro.rect.Width * (ro.canvasRelative ? bmp.Width : 1)),
+                                (int)(ro.rect.Height * (ro.canvasRelative ? bmp.Height : 1))
                             );
                             g.FillRectangle(brush, rect);
                         }
@@ -383,6 +366,16 @@ namespace osuThumb
 
                         rectangleObject.color = Color.FromArgb(a, r, g, b);
                     }
+                    else if (noSpaces.StartsWith("canvas-size:"))
+                    {
+                        string[] data = noSpaces.Split(':');
+                        bool canvasRelative = true;
+                        if (data[1] == "false")
+                        {
+                            canvasRelative = true;
+                        }
+                        rectangleObject.canvasRelative = canvasRelative;
+                    }
 
                     //End object
                     if (noSpaces[0] == '}')
@@ -459,12 +452,12 @@ namespace osuThumb
                     else if (noSpaces.StartsWith("canvas-size:"))
                     {
                         string[] data = noSpaces.Split(':');
-                        bool canvasSize = false;
+                        bool canvasRelative = false;
                         if (data[1] == "true")
                         {
-                            canvasSize = true;
+                            canvasRelative = true;
                         }
-                        imageObject.canvasSize = canvasSize;
+                        imageObject.canvasRelative = canvasRelative;
                      }
 
                     //End object

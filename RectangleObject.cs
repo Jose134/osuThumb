@@ -11,6 +11,7 @@ namespace osuThumb
     {
         private RectangleF _rect;
         private Color _color;
+        private bool _canvasRelative;
 
         public RectangleF rect
         {
@@ -32,6 +33,17 @@ namespace osuThumb
             set
             {
                 _color = value;
+            }
+        }
+        public bool canvasRelative
+        {
+            get
+            {
+                return _canvasRelative;
+            }
+            set
+            {
+                _canvasRelative = value;
             }
         }
 
