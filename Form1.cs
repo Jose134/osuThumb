@@ -20,18 +20,20 @@ namespace osuThumb
         private string appdataPath = "";
         private string osuFolder = "";
         private string thumbFolder = "";
+        private string layoutPath = "";
 
         //Drawing variables
         private List<object> renderObjects = new List<object>();
-        private Font defaultFont = new Font("Arial", 24);
+        private Font layoutFont = new Font("Arial", 24);
 
-        private Bitmap render;
+        private Bitmap render = new Bitmap(480, 360);
 
         public MainForm()
         {
             InitializeComponent();
         }
 
+        //Called when the form is loaded, does some initial setup
         private void Form1_Load(object sender, EventArgs e)
         {
             //Checks if required directories exist
@@ -50,6 +52,87 @@ namespace osuThumb
                     MessageBox.Show("ERROR: osu's bt folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            LoadDefault();
+        }
+
+        //Loads the layout in the default file
+        private void LoadDefault ()
+        {
+            if (!File.Exists("default.cfg"))
+            {
+                MessageBox.Show("Error: default.cfg not found.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                using (StreamReader sr = new StreamReader("default.cfg"))
+                {
+                    string line = "";
+
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line.StartsWith("layout"))
+                        {
+                            string[] data = line.Split('=');
+                            layoutPath = data[1].Substring(1);
+                        }
+                    }
+                }
+
+                if (!File.Exists(layoutPath))
+                {
+                    MessageBox.Show("ERROR: the layout file in default.cfg wasn't found, maybe it was moved or deleted?", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    LoadLayout(layoutPath);
+                }
+            }
+        }
+
+        //Saves current layout as default in the cfg file
+        private void SaveToDefault ()
+        {
+            if (!File.Exists(layoutPath))
+            {
+                MessageBox.Show("ERROR: No .layout file loaded", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!File.Exists("default.cfg"))
+            {
+                var file = File.Create("default.cfg");
+                file.Close();
+            }
+
+            using (StreamWriter sw = new StreamWriter("default.cfg")) {
+                sw.WriteLine("layout = " + layoutPath);
+            }
+        }
+
+        //Calls the Save function when the button is pressed
+        private void defaultButton_Click(object sender, EventArgs e)
+        {
+            SaveToDefault();
+        }
+
+        //Exports the image
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists("export"))
+            {
+                Directory.CreateDirectory("export");
+            }
+
+            int number = 0;
+            string filename = "";
+            do
+            {
+                filename = "export/" + idBox.Text + "_thumb + _" + number + ".jpg";
+                number++;
+            } while (File.Exists(filename));
+
+            render.Save(filename, ImageFormat.Jpeg);
         }
 
         //Changes the default font
@@ -59,7 +142,7 @@ namespace osuThumb
             FontDialog fontDialog = new FontDialog();
             if (fontDialog.ShowDialog() == DialogResult.OK)
             {
-                defaultFont = fontDialog.Font;
+                layoutFont = fontDialog.Font;
             }
         }
 
@@ -68,7 +151,7 @@ namespace osuThumb
         //THUMBNAIL GENERATOR
         private void generateButton_Click(object sender, EventArgs e)
         {
-            using (Bitmap bmp = new Bitmap(480, 360))
+            using (Bitmap bmp = new Bitmap(render.Width, render.Height))
             {
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
@@ -143,7 +226,7 @@ namespace osuThumb
                             }
 
                             SolidBrush brush = new SolidBrush(to.color);
-                            Font font = new Font(defaultFont.FontFamily, to.textSize == -1 ? defaultFont.Size : to.textSize);
+                            Font font = new Font(layoutFont.FontFamily, to.textSize == -1 ? layoutFont.Size : to.textSize);
                             Point position = new Point(
                                 (int)(to.position.X * bmp.Width),
                                 (int)(to.position.Y * bmp.Height)
@@ -232,7 +315,7 @@ namespace osuThumb
         {
             if (!File.Exists(filePath)) { return; }
 
-            StreamReader sr = new StreamReader(filePath);
+            propertiesPanel.Controls.Clear();
 
             string current = "";
 
@@ -242,6 +325,8 @@ namespace osuThumb
             renderObjects.Clear();
 
             int customPropertyCount = 0;
+
+            StreamReader sr = new StreamReader(filePath);
 
             string line = "";
             while ((line = sr.ReadLine()) != null)
@@ -255,12 +340,39 @@ namespace osuThumb
                 {
                     string[] data = line.Split(' ');
 
-                    if (data[1] == "text")           { current = "text";      textObject = new TextObject();           }
+                    if (data[1] == "text")           { current = "text"; textObject = new TextObject();                }
                     else if (data[1] == "rectangle") { current = "rectangle"; rectangleObject = new RectangleObject(); }
-                    else if (data[1] == "image")     { current = "image";     imageObject = new ImageObject();         }
+                    else if (data[1] == "image")     { current = "image"; imageObject = new ImageObject();             }
+                    else if (data[1] == "general")   { current = "general";                                            }
                 }
 
-                if (current == "text")
+                if (current == "general")
+                {
+                    //Looks for object properties
+                    if (noSpaces.StartsWith("font-family:"))
+                    {
+                        string[] data = line.Split(':');
+                        layoutFont = new Font(data[1].Substring(1), layoutFont.Size);
+                    }
+                    else if (noSpaces.StartsWith("font-size:"))
+                    {
+                        string[] data = line.Split(':');
+                        layoutFont = new Font(layoutFont.FontFamily, int.Parse(data[1]));
+                    }
+                    else if (noSpaces.StartsWith("size"))
+                    {
+                        string[] data = line.Split(':');
+                        data[1] = data[1].Substring(2, data[1].Length - 3);
+
+                        string[] split = data[1].Split(',');
+
+                        int width = int.Parse(split[0]);
+                        int height = int.Parse(split[1]);
+
+                        render = new Bitmap(width, height);
+                    }
+                }
+                else if (current == "text")
                 {
                     //Looks for object properties
                     if (noSpaces.StartsWith("text:"))
@@ -275,14 +387,15 @@ namespace osuThumb
 
                             Label variableLabel = new System.Windows.Forms.Label();
                             variableLabel.Name = "customVariableLabel_" + variableName;
-                            variableLabel.Location = new System.Drawing.Point(80 - variableName.Length * 10 , 25 * (customPropertyCount + 1) + 5);
                             variableLabel.Size = new System.Drawing.Size(variableName.Length * 10, 13);
+                            variableLabel.Location = new System.Drawing.Point(80 - variableLabel.Size.Width, 25 * (customPropertyCount + 1) + 5);
+                            variableLabel.TextAlign = ContentAlignment.MiddleRight;
                             variableLabel.Text = variableName;
 
                             TextBox variableBox = new System.Windows.Forms.TextBox();
                             variableBox.Name = "customVariableBox_" + variableName;
-                            variableBox.Location = new System.Drawing.Point(80, 25 * (customPropertyCount + 1));
-                            variableBox.Size = new System.Drawing.Size(150, 20);
+                            variableBox.Location = new System.Drawing.Point(100, 25 * (customPropertyCount + 1));
+                            variableBox.Size = new System.Drawing.Size(180, 20);
                             variableBox.TabIndex = 13;
 
                             this.propertiesPanel.Controls.Add(variableLabel);
@@ -403,14 +516,15 @@ namespace osuThumb
                             {
                                 Label variableLabel = new System.Windows.Forms.Label();
                                 variableLabel.Name = "customVariableLabel_" + variableName;
-                                variableLabel.Location = new System.Drawing.Point(80 - variableName.Length * 10, 25 * (customPropertyCount + 1) + 5);
                                 variableLabel.Size = new System.Drawing.Size(variableName.Length * 10, 13);
+                                variableLabel.Location = new System.Drawing.Point(80 - variableLabel.Size.Width, 25 * (customPropertyCount + 1) + 5);
+                                variableLabel.TextAlign = ContentAlignment.MiddleRight;
                                 variableLabel.Text = variableName;
 
                                 TextBox variableBox = new System.Windows.Forms.TextBox();
                                 variableBox.Name = "customVariableBox_" + variableName;
-                                variableBox.Location = new System.Drawing.Point(80, 25 * (customPropertyCount + 1));
-                                variableBox.Size = new System.Drawing.Size(150, 20);
+                                variableBox.Location = new System.Drawing.Point(100, 25 * (customPropertyCount + 1));
+                                variableBox.Size = new System.Drawing.Size(180, 20);
                                 variableBox.TabIndex = 13;
 
                                 this.propertiesPanel.Controls.Add(variableLabel);
@@ -472,28 +586,10 @@ namespace osuThumb
 
             sr.Close();
             sr.Dispose();
+
+            layoutPath = filePath;
         }
 
         #endregion
-
-        //Exports the image
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-            if (!Directory.Exists("export"))
-            {
-                Directory.CreateDirectory("export");
-            }
-
-            int number = 0;
-            string filename = "";
-            do
-            {
-                filename = "export/" + idBox.Text + "_thumb + _" + number + ".jpg";
-                number++;
-            } while (File.Exists(filename));
-
-            render.Save(filename, ImageFormat.Jpeg);
-        }
-
     }
 }

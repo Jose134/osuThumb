@@ -32,10 +32,12 @@
             this.generateButton = new System.Windows.Forms.Button();
             this.idBox = new System.Windows.Forms.TextBox();
             this.idLabel = new System.Windows.Forms.Label();
-            this.fontButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.propertiesPanel = new System.Windows.Forms.Panel();
+            this.defaultButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.propertiesPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // preview
@@ -71,22 +73,12 @@
             this.idLabel.TabIndex = 3;
             this.idLabel.Text = "Beatmapset id";
             // 
-            // fontButton
-            // 
-            this.fontButton.Location = new System.Drawing.Point(501, 291);
-            this.fontButton.Name = "fontButton";
-            this.fontButton.Size = new System.Drawing.Size(290, 23);
-            this.fontButton.TabIndex = 6;
-            this.fontButton.Text = "Select Font";
-            this.fontButton.UseVisualStyleBackColor = true;
-            this.fontButton.Click += new System.EventHandler(this.fontButton_Click);
-            // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(501, 262);
+            this.loadButton.Location = new System.Drawing.Point(501, 291);
             this.loadButton.Name = "loadButton";
             this.loadButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.loadButton.Size = new System.Drawing.Size(290, 23);
+            this.loadButton.Size = new System.Drawing.Size(143, 23);
             this.loadButton.TabIndex = 9;
             this.loadButton.Text = "Load Layout";
             this.loadButton.UseVisualStyleBackColor = true;
@@ -105,20 +97,41 @@
             // propertiesPanel
             // 
             this.propertiesPanel.AutoScroll = true;
+            this.propertiesPanel.Controls.Add(this.label1);
             this.propertiesPanel.Location = new System.Drawing.Point(498, 38);
             this.propertiesPanel.Name = "propertiesPanel";
             this.propertiesPanel.Size = new System.Drawing.Size(293, 218);
             this.propertiesPanel.TabIndex = 15;
+            // 
+            // defaultButton
+            // 
+            this.defaultButton.Location = new System.Drawing.Point(648, 291);
+            this.defaultButton.Name = "defaultButton";
+            this.defaultButton.Size = new System.Drawing.Size(143, 23);
+            this.defaultButton.TabIndex = 16;
+            this.defaultButton.Text = "Set as default";
+            this.defaultButton.UseVisualStyleBackColor = true;
+            this.defaultButton.Click += new System.EventHandler(this.defaultButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(91, 93);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(109, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "asdasdasdasdasdasd";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 390);
+            this.Controls.Add(this.defaultButton);
             this.Controls.Add(this.propertiesPanel);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.loadButton);
-            this.Controls.Add(this.fontButton);
             this.Controls.Add(this.idLabel);
             this.Controls.Add(this.idBox);
             this.Controls.Add(this.generateButton);
@@ -126,6 +139,8 @@
             this.Name = "MainForm";
             this.Text = "osu!Thumbnail Generator";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.propertiesPanel.ResumeLayout(false);
+            this.propertiesPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -137,10 +152,11 @@
         private System.Windows.Forms.Button generateButton;
         private System.Windows.Forms.TextBox idBox;
         private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Button fontButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Panel propertiesPanel;
+        private System.Windows.Forms.Button defaultButton;
+        private System.Windows.Forms.Label label1;
     }
 }
 
