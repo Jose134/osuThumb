@@ -83,6 +83,30 @@ namespace osuThumb
                             ImageObject io = (ImageObject)renderObject;
                             //Checks for variables in path property
                             string save = io.path;
+                            if ((io.path[0] == '%') && (io.path[io.path.Length - 1] == '%'))
+                            {
+                                string variableName = io.path.Substring(1, io.path.Length - 2);
+
+                                if (variableName == "BG")
+                                {
+                                    io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
+                                }
+                                else
+                                {
+                                    foreach (Control c in propertiesPanel.Controls)
+                                    {
+                                        if (c.GetType() == typeof(TextBox))
+                                        {
+                                            if (c.Name == "customVariableBox_" + variableName)
+                                            {
+                                                io.path = "res/" + variableName + "/" + c.Text;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            /*
+                            string save = io.path;
                             if (io.path == "%BG%")
                             {
                                 io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
@@ -97,7 +121,7 @@ namespace osuThumb
                             {
                                 io.path = "res/mods/selection-mod-doubletime" + ".png";
                                 save = "%MODS%";
-                            }
+                            }*/
                             
                             io.LoadImage();
                             io.path = save;
@@ -121,13 +145,13 @@ namespace osuThumb
                             //Checks for custom text variables
                             if ((to.text[0] == '%') && (to.text[to.text.Length - 1] == '%'))
                             {
-                                string propertyName = to.text.Substring(1, to.text.Length - 2);
+                                string variableName = to.text.Substring(1, to.text.Length - 2);
 
                                 foreach (Control c in propertiesPanel.Controls)
                                 {
                                     if (c.GetType() == typeof(TextBox))
                                     {
-                                        if (c.Name == "customPropertyBox_" + propertyName)
+                                        if (c.Name == "customVariableBox_" + variableName)
                                         {
                                             text = c.Text;
                                         }
@@ -261,25 +285,25 @@ namespace osuThumb
                         string[] data = noSpaces.Split(':');
                         textObject.text = data[1];
 
-                        //PropertyGenerator
+                        //Variable Generator
                         if ((textObject.text[0] == '%') && (textObject.text[textObject.text.Length - 1] == '%'))
                         {
-                            string propertyName = textObject.text.Substring(1, textObject.text.Length - 2);
+                            string variableName = textObject.text.Substring(1, textObject.text.Length - 2);
 
-                            Label propertyLabel = new System.Windows.Forms.Label();
-                            propertyLabel.Name = "customPropertyLabel_" + propertyName;
-                            propertyLabel.Location = new System.Drawing.Point(80 - textObject.text.Length * 8 , 25 * (customPropertyCount + 1) + 5);
-                            propertyLabel.Size = new System.Drawing.Size(textObject.text.Length * 8, 13);
-                            propertyLabel.Text = propertyName;
+                            Label variableLabel = new System.Windows.Forms.Label();
+                            variableLabel.Name = "customVariableLabel_" + variableName;
+                            variableLabel.Location = new System.Drawing.Point(80 - variableName.Length * 10 , 25 * (customPropertyCount + 1) + 5);
+                            variableLabel.Size = new System.Drawing.Size(variableName.Length * 10, 13);
+                            variableLabel.Text = variableName;
 
-                            TextBox propertyBox = new System.Windows.Forms.TextBox();
-                            propertyBox.Name = "customPropertyBox_" + propertyName;
-                            propertyBox.Location = new System.Drawing.Point(80, 25 * (customPropertyCount + 1));
-                            propertyBox.Size = new System.Drawing.Size(150, 20);
-                            propertyBox.TabIndex = 13;
+                            TextBox variableBox = new System.Windows.Forms.TextBox();
+                            variableBox.Name = "customVariableBox_" + variableName;
+                            variableBox.Location = new System.Drawing.Point(80, 25 * (customPropertyCount + 1));
+                            variableBox.Size = new System.Drawing.Size(150, 20);
+                            variableBox.TabIndex = 13;
 
-                            this.propertiesPanel.Controls.Add(propertyLabel);
-                            this.propertiesPanel.Controls.Add(propertyBox);
+                            this.propertiesPanel.Controls.Add(variableLabel);
+                            this.propertiesPanel.Controls.Add(variableBox);
 
                             customPropertyCount++;
                         }
@@ -375,6 +399,34 @@ namespace osuThumb
                     {
                         string[] data = noSpaces.Split(':');
                         imageObject.path = data[1];
+
+                        //Variable Generator
+                        if ((imageObject.path[0] == '%') && (imageObject.path[imageObject.path.Length - 1] == '%'))
+                        {
+                            string variableName = imageObject.path.Substring(1, imageObject.path.Length - 2);
+                            
+                            //Skips the BG variable since it's a special one
+                            if (variableName != "BG")
+                            {
+                                Label variableLabel = new System.Windows.Forms.Label();
+                                variableLabel.Name = "customVariableLabel_" + variableName;
+                                variableLabel.Location = new System.Drawing.Point(80 - variableName.Length * 10, 25 * (customPropertyCount + 1) + 5);
+                                variableLabel.Size = new System.Drawing.Size(variableName.Length * 10, 13);
+                                variableLabel.Text = variableName;
+
+                                TextBox variableBox = new System.Windows.Forms.TextBox();
+                                variableBox.Name = "customVariableBox_" + variableName;
+                                variableBox.Location = new System.Drawing.Point(80, 25 * (customPropertyCount + 1));
+                                variableBox.Size = new System.Drawing.Size(150, 20);
+                                variableBox.TabIndex = 13;
+
+                                this.propertiesPanel.Controls.Add(variableLabel);
+                                this.propertiesPanel.Controls.Add(variableBox);
+
+                                customPropertyCount++;
+
+                            }
+                        }
                     }
                     else if (noSpaces.StartsWith("rect:"))
                     {
