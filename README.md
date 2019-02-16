@@ -8,21 +8,23 @@ It's just a text file, the syntax for these files is pretty simple
  
 you create an object like this
 
-{ ObjectType
-  property1: value
-  property2: value
-  ...
-  propertyN: value
-}
+{ ObjectType\
+  property1: value\
+  property2: value\
+  ...\
+  propertyN: value\
+}\
 
 Objects will be drawn in order so the one at the bottom of the file will be the last one drawn
 
-There are currently 3 Object types:
-**- image **
-**- text **
-**- rectangle **
+There are currently 3 Object types:\
+**image**\
+**text**\
+**rectangle**\
 
-###### Properties:
+
+
+**Properties:**
 Properties have a default value so you don't need to write every property for every object.
 
 This is the list of properties for each Object type:
