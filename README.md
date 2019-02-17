@@ -19,10 +19,11 @@ You create an object like this:
 
 Objects will be drawn in order so the one at the bottom of the file will be the last one drawn.
 
-There are currently 3 Object types:\
-**image**\
-**text**\
-**rectangle**
+There are currently 4 Object types:\
+**general:** Holds general information about the layout.\
+**image:** Holds information for rendering an image.\
+**text:** Holds information for rendering a text.\
+**rectangle:** Holds information for rendering a rectangle.
 
 
 
@@ -30,6 +31,14 @@ There are currently 3 Object types:\
 Properties have a default value so you don't need to write every property for every object.
 
 This is the list of properties for each Object type:
+
+**general:**
+  - font-family: Sets default font's family used to render text Objects.
+    default: Arial
+  - font-size: Sets default font's size. 
+    default: 24
+  - size: Sets the size of the image rendered.
+    default: (480, 360)
 
 **image:**
   - path: The path where the image file is stored. 
@@ -76,3 +85,5 @@ For example:\
 }
 
 if you set Ranking value to "A.png" the program will look for the file "res/Ranking/A.png"
+
+There's a special image path variable which is %BG%. This variable will load the beatmap background path to the image object's path.
