@@ -2,11 +2,12 @@
 
 This is a program that will generate thumbnails for my osu! youtube videos (lately I've been too lazy to make them manually)
 
+# GUIDE UwU
 
 ## The .layout file format
-It's just a text file, the syntax for these files is pretty simple
+It's just a text file, the syntax for these files is pretty simple.
  
-you create an object like this
+You create an object like this:
 
 { ObjectType\
   property1: value\
@@ -16,7 +17,7 @@ you create an object like this
 }
 
 
-Objects will be drawn in order so the one at the bottom of the file will be the last one drawn
+Objects will be drawn in order so the one at the bottom of the file will be the last one drawn.
 
 There are currently 3 Object types:\
 **image**\
@@ -58,5 +59,20 @@ This is the list of properties for each Object type:
   - color: The color of the rectangle.
     default: (255, 255, 255, 255)
     
+#### Custom variables
 
-   
+You can use custom variables in text's text and image's path properties. To create a variable just write its name between '%' symbols. When the layout file is loaded the program will create Controls so that you can assign a value to those variables.
+
+Example:\
+{ text\
+  text: %Player%\
+}
+
+For image's path you only need to write the file name (and its format). The program will look for the image at "res/VariableName/VariableValue"
+
+For example:\
+{ image\
+  path: %Ranking%\
+}
+
+if you set Ranking value to "A.png" the program will look for the file "res/Ranking/A.png"
