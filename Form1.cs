@@ -324,7 +324,7 @@ namespace osuThumb
             ImageObject imageObject = null;
             renderObjects.Clear();
 
-            int customPropertyCount = 0;
+            int customVariableCount = 0;
 
             StreamReader sr = new StreamReader(filePath);
 
@@ -377,8 +377,8 @@ namespace osuThumb
                     //Looks for object properties
                     if (noSpaces.StartsWith("text:"))
                     {
-                        string[] data = noSpaces.Split(':');
-                        textObject.text = data[1];
+                        string[] data = line.Split(':');
+                        textObject.text = data[1].Substring(1);
 
                         //Variable Generator
                         if ((textObject.text[0] == '%') && (textObject.text[textObject.text.Length - 1] == '%'))
@@ -387,21 +387,21 @@ namespace osuThumb
 
                             Label variableLabel = new System.Windows.Forms.Label();
                             variableLabel.Name = "customVariableLabel_" + variableName;
-                            variableLabel.Size = new System.Drawing.Size(variableName.Length * 10, 13);
-                            variableLabel.Location = new System.Drawing.Point(80 - variableLabel.Size.Width, 25 * (customPropertyCount + 1) + 5);
+                            variableLabel.Size = new System.Drawing.Size(90, 13);
                             variableLabel.TextAlign = ContentAlignment.MiddleRight;
                             variableLabel.Text = variableName;
+                            variableLabel.Location = new System.Drawing.Point(80 - variableLabel.Size.Width, 25 * (customVariableCount + 1) + 5);
 
                             TextBox variableBox = new System.Windows.Forms.TextBox();
                             variableBox.Name = "customVariableBox_" + variableName;
-                            variableBox.Location = new System.Drawing.Point(100, 25 * (customPropertyCount + 1));
-                            variableBox.Size = new System.Drawing.Size(180, 20);
+                            variableBox.Location = new System.Drawing.Point(80, 25 * (customVariableCount + 1));
+                            variableBox.Size = new System.Drawing.Size(210, 20);
                             variableBox.TabIndex = 13;
 
                             this.propertiesPanel.Controls.Add(variableLabel);
                             this.propertiesPanel.Controls.Add(variableBox);
 
-                            customPropertyCount++;
+                            customVariableCount++;
                         }
                     }
                     else if (noSpaces.StartsWith("position:"))
@@ -516,21 +516,21 @@ namespace osuThumb
                             {
                                 Label variableLabel = new System.Windows.Forms.Label();
                                 variableLabel.Name = "customVariableLabel_" + variableName;
-                                variableLabel.Size = new System.Drawing.Size(variableName.Length * 10, 13);
-                                variableLabel.Location = new System.Drawing.Point(80 - variableLabel.Size.Width, 25 * (customPropertyCount + 1) + 5);
+                                variableLabel.Size = new System.Drawing.Size(90, 13);
                                 variableLabel.TextAlign = ContentAlignment.MiddleRight;
                                 variableLabel.Text = variableName;
+                                variableLabel.Location = new System.Drawing.Point(80 - variableLabel.Size.Width, 25 * (customVariableCount + 1) + 5);
 
                                 TextBox variableBox = new System.Windows.Forms.TextBox();
                                 variableBox.Name = "customVariableBox_" + variableName;
-                                variableBox.Location = new System.Drawing.Point(100, 25 * (customPropertyCount + 1));
-                                variableBox.Size = new System.Drawing.Size(180, 20);
+                                variableBox.Location = new System.Drawing.Point(80, 25 * (customVariableCount + 1));
+                                variableBox.Size = new System.Drawing.Size(210, 20);
                                 variableBox.TabIndex = 13;
 
                                 this.propertiesPanel.Controls.Add(variableLabel);
                                 this.propertiesPanel.Controls.Add(variableBox);
 
-                                customPropertyCount++;
+                                customVariableCount++;
 
                             }
                         }

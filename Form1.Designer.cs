@@ -36,8 +36,6 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.propertiesPanel = new System.Windows.Forms.Panel();
             this.defaultButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.propertiesPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // preview
@@ -97,10 +95,10 @@
             // propertiesPanel
             // 
             this.propertiesPanel.AutoScroll = true;
-            this.propertiesPanel.Controls.Add(this.label1);
+            this.propertiesPanel.BackColor = System.Drawing.SystemColors.Control;
             this.propertiesPanel.Location = new System.Drawing.Point(498, 38);
             this.propertiesPanel.Name = "propertiesPanel";
-            this.propertiesPanel.Size = new System.Drawing.Size(293, 218);
+            this.propertiesPanel.Size = new System.Drawing.Size(293, 247);
             this.propertiesPanel.TabIndex = 15;
             // 
             // defaultButton
@@ -112,16 +110,6 @@
             this.defaultButton.Text = "Set as default";
             this.defaultButton.UseVisualStyleBackColor = true;
             this.defaultButton.Click += new System.EventHandler(this.defaultButton_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(91, 93);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(109, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "asdasdasdasdasdasd";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -136,11 +124,10 @@
             this.Controls.Add(this.idBox);
             this.Controls.Add(this.generateButton);
             this.Controls.Add(this.preview);
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "osu!Thumbnail Generator";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.propertiesPanel.ResumeLayout(false);
-            this.propertiesPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,7 +143,6 @@
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Panel propertiesPanel;
         private System.Windows.Forms.Button defaultButton;
-        private System.Windows.Forms.Label label1;
     }
 }
 
