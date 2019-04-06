@@ -53,6 +53,8 @@ This is the list of properties for each Object type:
 **text:**
   - text: The text that will be rendered.
     default: NONE
+  - suffix: A suffix for the test (useful for accuracy's % and star rating's *)
+    default: NONE
   - position: Point where the text will be drawn.
     default: (0, 0)
   - color: Text's color.
