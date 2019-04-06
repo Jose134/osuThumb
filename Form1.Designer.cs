@@ -36,6 +36,7 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.propertiesPanel = new System.Windows.Forms.Panel();
             this.defaultButton = new System.Windows.Forms.Button();
+            this.scanButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // preview
@@ -59,7 +60,7 @@
             // 
             this.idBox.Location = new System.Drawing.Point(578, 12);
             this.idBox.Name = "idBox";
-            this.idBox.Size = new System.Drawing.Size(210, 20);
+            this.idBox.Size = new System.Drawing.Size(109, 20);
             this.idBox.TabIndex = 2;
             // 
             // idLabel
@@ -111,11 +112,22 @@
             this.defaultButton.UseVisualStyleBackColor = true;
             this.defaultButton.Click += new System.EventHandler(this.defaultButton_Click);
             // 
+            // scanButton
+            // 
+            this.scanButton.Location = new System.Drawing.Point(693, 10);
+            this.scanButton.Name = "scanButton";
+            this.scanButton.Size = new System.Drawing.Size(98, 23);
+            this.scanButton.TabIndex = 17;
+            this.scanButton.Text = "Scan Folder";
+            this.scanButton.UseVisualStyleBackColor = true;
+            this.scanButton.Click += new System.EventHandler(this.scanButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 390);
+            this.Controls.Add(this.scanButton);
             this.Controls.Add(this.defaultButton);
             this.Controls.Add(this.propertiesPanel);
             this.Controls.Add(this.saveButton);
@@ -143,6 +155,7 @@
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Panel propertiesPanel;
         private System.Windows.Forms.Button defaultButton;
+        private System.Windows.Forms.Button scanButton;
     }
 }
 

@@ -7,3 +7,4 @@ C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Release\osuThumb.csproj.Gene
 C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Release\osuThumb.csproj.CoreCompileInputs.cache
 C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Release\osuThumb.exe
 C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Release\osuThumb.pdb
+C:\Users\Jose134\source\repos\osuThumb\osuThumb\obj\Release\osuThumb.csprojAssemblyReference.cache

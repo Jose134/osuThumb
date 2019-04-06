@@ -20,13 +20,15 @@ namespace osuThumb
         private string appdataPath = "";
         private string osuFolder = "";
         private string thumbFolder = "";
+        private string songsPath = "";
+        private string bgFilePath = "";
         private string layoutPath = "";
 
         //Drawing variables
         private List<object> renderObjects = new List<object>();
         private Font layoutFont = new Font("Arial", 24);
 
-        private Bitmap render = new Bitmap(480, 360);
+        private Bitmap render = new Bitmap(1920, 1080);
 
         public MainForm()
         {
@@ -51,9 +53,42 @@ namespace osuThumb
                 {
                     MessageBox.Show("ERROR: osu's bt folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
+                //gets osu's songs directory
+                songsPath = osuFolder + @"\Songs";
+                if (!Directory.Exists(thumbFolder))
+                {
+                    MessageBox.Show("ERROR: osu's Songs folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             LoadDefault();
+        }
+
+        //Lets the user select an image from the beatmap's folder to use as background
+        private void scanButton_Click(object sender, EventArgs e)
+        {
+            string[] subdirectories = Directory.GetDirectories(songsPath);
+            for (int i = 0; i < subdirectories.Length; i++)
+            {
+                string beatmapsetId = subdirectories[i].Split(' ')[0];
+                string[] substrings = beatmapsetId.Split('\\');
+                beatmapsetId = substrings[substrings.Length - 1];
+                Console.WriteLine(beatmapsetId);
+                if (idBox.Text == beatmapsetId)
+                {
+                    OpenFileDialog dialog = new OpenFileDialog();
+                    dialog.InitialDirectory = subdirectories[i];
+                    if ((dialog.ShowDialog()) == DialogResult.OK)
+                    {
+                        bgFilePath = dialog.FileName;
+                    }
+
+                    return;
+                }
+            }
+
+            MessageBox.Show("ERROR: beatmap's folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         //Loads the layout in the default file
@@ -172,7 +207,8 @@ namespace osuThumb
 
                                 if (variableName == "BG")
                                 {
-                                    io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
+                                    //io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
+                                    io.path = bgFilePath;
                                 }
                                 else
                                 {
@@ -588,6 +624,9 @@ namespace osuThumb
             sr.Dispose();
 
             layoutPath = filePath;
+
+            //Updates the preview image to match the aspect ratio
+            preview.Size = new Size(preview.Size.Width, preview.Size.Width * render.Height / render.Width);
         }
 
         #endregion
