@@ -74,7 +74,7 @@ namespace osuThumb
                 string beatmapsetId = subdirectories[i].Split(' ')[0];
                 string[] substrings = beatmapsetId.Split('\\');
                 beatmapsetId = substrings[substrings.Length - 1];
-                Console.WriteLine(beatmapsetId);
+
                 if (idBox.Text == beatmapsetId)
                 {
                     OpenFileDialog dialog = new OpenFileDialog();
@@ -232,9 +232,9 @@ namespace osuThumb
 
                             Rectangle rect = new Rectangle(
                                 (int)(io.rect.X * (io.canvasRelative ? bmp.Width : 1)),
-                                (int)(io.rect.Y * (io.canvasRelative ? bmp.Width : 1)),
+                                (int)(io.rect.Y * (io.canvasRelative ? bmp.Height : 1)),
                                 (int)(io.rect.Width * (io.canvasRelative ? bmp.Width : bitmap.Width)),
-                                (int)(io.rect.Height * (io.canvasRelative ? bmp.Width : bitmap.Height))
+                                (int)(io.rect.Height * (io.canvasRelative ? bmp.Height : bitmap.Height))
                             );
 
                             g.DrawImage(bitmap, rect);
@@ -261,6 +261,7 @@ namespace osuThumb
                                 }
                             }
 
+                            text += to.suffix;
                             SolidBrush brush = new SolidBrush(to.color);
                             Font font = new Font(layoutFont.FontFamily, to.textSize == -1 ? layoutFont.Size : to.textSize);
                             Point position = new Point(
@@ -439,6 +440,11 @@ namespace osuThumb
 
                             customVariableCount++;
                         }
+                    }
+                    else if (noSpaces.StartsWith("suffix:"))
+                    {
+                        string[] data = line.Split(':');
+                        textObject.suffix = data[1].Substring(1);
                     }
                     else if (noSpaces.StartsWith("position:"))
                     {

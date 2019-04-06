@@ -10,6 +10,7 @@ namespace osuThumb
     class TextObject
     {
         private string _text;
+        private string _suffix;
         private PointF _position;
         private Color _color;
         private int _textSize;
@@ -23,6 +24,17 @@ namespace osuThumb
             set
             {
                 _text = value;
+            }
+        }
+        public string suffix
+        {
+            get
+            {
+                return _suffix;
+            }
+            set
+            {
+                _suffix = value;
             }
         }
         public PointF position
@@ -63,13 +75,15 @@ namespace osuThumb
         public TextObject ()
         {
             this._text = "";
+            this._suffix = "";
             this._position = new PointF(0, 0);
             this._color = Color.FromArgb(255, 255, 255, 255);
             this.textSize = -1;
         }
-        public TextObject(string text, PointF position, Color color, int textSize)
+        public TextObject(string text, string suffix, PointF position, Color color, int textSize)
         {
             this._text = text;
+            this._suffix = suffix;
             this._position = position;
             this._color = color;
             this.textSize = textSize;
