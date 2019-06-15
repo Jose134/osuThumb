@@ -19,7 +19,6 @@ namespace osuThumb
         //Folder variables
         private string appdataPath = "";
         private string osuFolder = "";
-        private string thumbFolder = "";
         private string songsPath = "";
         private string bgFilePath = "";
         private string layoutPath = "";
@@ -48,15 +47,9 @@ namespace osuThumb
             }
             else
             {
-                thumbFolder = osuFolder + @"\Data\bt";
-                if (!Directory.Exists(thumbFolder))
-                {
-                    MessageBox.Show("ERROR: osu's bt folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
                 //gets osu's songs directory
                 songsPath = osuFolder + @"\Songs";
-                if (!Directory.Exists(thumbFolder))
+                if (!Directory.Exists(songsPath))
                 {
                     MessageBox.Show("ERROR: osu's Songs folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -288,7 +281,6 @@ namespace osuThumb
                 }
 
                 render = (Bitmap)bmp.Clone();
-                render.Save("thumb.bmp");
             }
 
             using (Graphics g = preview.CreateGraphics())
