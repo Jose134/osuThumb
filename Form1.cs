@@ -207,7 +207,6 @@ namespace osuThumb
 
                                 if (variableName == "BG")
                                 {
-                                    //io.path = thumbFolder + @"\" + idBox.Text + "l.jpg";
                                     io.path = bgFilePath;
                                 }
                                 else
@@ -224,20 +223,22 @@ namespace osuThumb
                                     }
                                 }
                             }
-                            
-                            io.LoadImage();
-                            io.path = save;
 
-                            Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
+                            if (io.LoadImage())
+                            {
+                                io.path = save;
 
-                            Rectangle rect = new Rectangle(
-                                (int)(io.rect.X * (io.canvasRelative ? bmp.Width : 1)),
-                                (int)(io.rect.Y * (io.canvasRelative ? bmp.Height : 1)),
-                                (int)(io.rect.Width * (io.canvasRelative ? bmp.Width : bitmap.Width)),
-                                (int)(io.rect.Height * (io.canvasRelative ? bmp.Height : bitmap.Height))
-                            );
+                                Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
 
-                            g.DrawImage(bitmap, rect);
+                                Rectangle rect = new Rectangle(
+                                    (int)(io.rect.X * (io.canvasRelative ? bmp.Width : 1)),
+                                    (int)(io.rect.Y * (io.canvasRelative ? bmp.Height : 1)),
+                                    (int)(io.rect.Width * (io.canvasRelative ? bmp.Width : bitmap.Width)),
+                                    (int)(io.rect.Height * (io.canvasRelative ? bmp.Height : bitmap.Height))
+                                );
+
+                                g.DrawImage(bitmap, rect);
+                            }
                         }
                         else if (renderObject.GetType() == typeof(TextObject))
                         {

@@ -90,9 +90,20 @@ namespace osuThumb
             LoadImage();
         }
 
-        public void LoadImage ()
+        public bool LoadImage ()
         {
-            _image = Bitmap.FromFile(_path);
+            bool success = true;
+
+            try
+            {
+                _image = Bitmap.FromFile(_path);
+            }
+            catch
+            {
+                success = false;
+            }
+
+            return success;
         }
     }
 }
