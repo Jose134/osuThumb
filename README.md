@@ -43,12 +43,14 @@ This is the list of properties for each Object type:
 **image:**
   - path: The path where the image file is stored. 
     default: NONE
-  - canvas-relative: Can be either true or false, this will make the rect relative to the canvas instead of to the image file.
-    default: false
   - rect: Rect where the image will be drawn, if canvas-relative is true the values will be multiplied by canvas' width and height.
     default: (0, 0, 1, 1)
   - color: The image gets tinted with this color. The alpha channel is ignored but must be written.
     default: (255, 255, 255, 255)
+  - position-type: Indicates how to handle the x and y numbers of the rect, can be either pixels (x and y will be multiplied by 1) or canvasmult (x and y will be multiplied by canvas' width and height)
+    default: pixels
+  - size-type: Indicates how to handle the width and height numbers of the rect, can be: pixels (width and height will be multiplied by 1); mult (width and height will be multiplied by image's width and height); canvasmult (width and height will be multiplied by canvas' width and height)
+    default: pixels
     
 **text:**
   - text: The text that will be rendered.
@@ -61,6 +63,8 @@ This is the list of properties for each Object type:
     default: (255, 255, 255, 255)
   - font-size: Font's size.
     default: (taken from default font)
+  - position-type: Indicates how to handle the x and y numbers of the rect, can be either pixels (x and y will be multiplied by 1) or canvasmult (x and y will be multiplied by canvas' width and height)
+    default: pixels
     
 **rectangle:**
   - canvas-relative: Can be either true or false, this will make the rect relative to the canvas.
@@ -69,6 +73,10 @@ This is the list of properties for each Object type:
     default: (0, 0, 1, 1)
   - color: The color of the rectangle.
     default: (255, 255, 255, 255)
+  - position-type: Indicates how to handle the x and y numbers of the rect, can be either pixels (x and y will be multiplied by 1) or canvasmult (x and y will be multiplied by canvas' width and height)
+    default: pixels
+  - size-type: Indicates how to handle the width and height numbers of the rect, can be either pixels (width and height will be multiplied by 1) or canvasmult (width and height will be multiplied by canvas' width and height)
+    default: pixels
     
 #### Custom variables
 
