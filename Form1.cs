@@ -228,19 +228,31 @@ namespace osuThumb
                             {
                                 Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
 
+                                int x = (int)io.rect.X;
+                                int y = (int)io.rect.Y;
+                                int w = (int)io.rect.Width;
+                                int h = (int)io.rect.Height;
 
+                                //positionType == MeasureType.pixels case omitted because x and y wouldn't need to change their value
+                                if (io.positionType == MeasureType.canvasmult)
+                                {
+                                    x = (int)(io.rect.X * bmp.Width);
+                                    y = (int)(io.rect.Y * bmp.Height);
+                                }
 
-                                int w;
-                                int h;
+                                //sizeType == MeasureType.pixels case omitted because w and h wouldn't need to change their value
+                                if (io.sizeType == MeasureType.mult)
+                                {
+                                    w = (int)(io.rect.Width * bitmap.Width);
+                                    h = (int)(io.rect.Height * bitmap.Height);
+                                }
+                                else if (io.sizeType == MeasureType.canvasmult)
+                                {
+                                    w = (int)(io.rect.Width * bmp.Width);
+                                    h = (int)(io.rect.Height * bmp.Height);
+                                }
 
-                                Rectangle rect = new Rectangle(
-                                    (int)(io.rect.X * (io.canvasRelative ? bmp.Width : 1)),
-                                    (int)(io.rect.Y * (io.canvasRelative ? bmp.Height : 1)),
-                                    w,
-                                    h
-                                    //(int)(io.rect.Width * (io.canvasRelative ? bmp.Width : bitmap.Width)),
-                                    //(int)(io.rect.Height * (io.canvasRelative ? bmp.Height : bitmap.Height))
-                                );
+                                Rectangle rect = new Rectangle(x, y, w, h);
 
                                 g.DrawImage(bitmap, rect);
                             }
@@ -282,12 +294,27 @@ namespace osuThumb
                             RectangleObject ro = (RectangleObject)renderObject;
 
                             SolidBrush brush = new SolidBrush(ro.color);
-                            Rectangle rect = new Rectangle(
-                                (int)(ro.rect.X * (ro.canvasRelative ? bmp.Width : 1)),
-                                (int)(ro.rect.Y * (ro.canvasRelative ? bmp.Height : 1)),
-                                (int)(ro.rect.Width * (ro.canvasRelative ? bmp.Width : 1)),
-                                (int)(ro.rect.Height * (ro.canvasRelative ? bmp.Height : 1))
-                            );
+
+                            int x = (int)ro.rect.X;
+                            int y = (int)ro.rect.Y;
+                            int w = (int)ro.rect.Width;
+                            int h = (int)ro.rect.Height;
+
+                            //positionType == MeasureType.pixels case omitted because x and y wouldn't need to change their values
+                            if (ro.positionType == MeasureType.canvasmult)
+                            {
+                                x = (int)(ro.rect.X * bmp.Width);
+                                y = (int)(ro.rect.Y * bmp.Height);
+                            }
+
+                            //sizeType == MeasureType.pixels case omitted becuase w and h wouldn't need to change their values
+                            if (ro.sizeType == MeasureType.canvasmult)
+                            {
+                                w = (int)(ro.rect.Width * bmp.Width);
+                                h = (int)(ro.rect.Height * bmp.Height);
+                            }
+
+                            Rectangle rect = new Rectangle(x, y, w, h);
                             g.FillRectangle(brush, rect);
                         }
                     }
