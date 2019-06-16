@@ -560,9 +560,29 @@ namespace osuThumb
                         bool canvasRelative = true;
                         if (data[1] == "false")
                         {
-                            canvasRelative = true;
+                            canvasRelative = false;
                         }
                         rectangleObject.canvasRelative = canvasRelative;
+                    }
+                    else if (noSpaces.StartsWith("position-type:"))
+                    {
+                        string[] data = noSpaces.Split(':');
+                        MeasureType positionType = MeasureType.pixels;
+                        if (data[1] == "canvasmult")
+                        {
+                            positionType = MeasureType.canvasmult;
+                        }
+                        rectangleObject.positionType = positionType;
+                    }
+                    else if (noSpaces.StartsWith("size-type:"))
+                    {
+                        string[] data = noSpaces.Split(':');
+                        MeasureType sizeType = MeasureType.pixels;
+                        if (data[1] == "canvasmult")
+                        {
+                            sizeType = MeasureType.canvasmult;
+                        }
+                        rectangleObject.sizeType = sizeType;
                     }
 
                     //End object
@@ -647,7 +667,28 @@ namespace osuThumb
                             canvasRelative = true;
                         }
                         imageObject.canvasRelative = canvasRelative;
-                     }
+                    }
+                    else if (noSpaces.StartsWith("position-type:"))
+                    {
+                        string[] data = noSpaces.Split(':');
+                        MeasureType positionType = MeasureType.pixels;
+                        if (data[1] == "canvasmult")
+                        {
+                            positionType = MeasureType.canvasmult;
+                        }
+                        imageObject.positionType = positionType;
+                    }
+                    else if (noSpaces.StartsWith("size-type:"))
+                    {
+                        string[] data = noSpaces.Split(':');
+                        MeasureType sizeType = MeasureType.pixels;
+                        if (data[1] == "canvasmult")
+                        {
+                            sizeType = MeasureType.canvasmult;
+                        }
+                        imageObject.sizeType = sizeType;
+                    }
+
 
                     //End object
                     if (noSpaces[0] == '}')
