@@ -14,6 +14,7 @@ namespace osuThumb
         private PointF _position;
         private Color _color;
         private int _textSize;
+        private MeasureType _positionType;
 
         public string text
         {
@@ -70,6 +71,17 @@ namespace osuThumb
                 _textSize = value;
             }
         }
+        public MeasureType positionType
+        {
+            get
+            {
+                return _positionType;
+            }
+            set
+            {
+                _positionType = value;
+            }
+        }
 
         //Constructor
         public TextObject ()
@@ -79,6 +91,7 @@ namespace osuThumb
             this._position = new PointF(0, 0);
             this._color = Color.FromArgb(255, 255, 255, 255);
             this.textSize = -1;
+            this._positionType = MeasureType.pixels;
         }
         public TextObject(string text, string suffix, PointF position, Color color, int textSize)
         {
@@ -87,6 +100,7 @@ namespace osuThumb
             this._position = position;
             this._color = color;
             this.textSize = textSize;
+            this._positionType = MeasureType.pixels;
         }
     }
 }

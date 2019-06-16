@@ -14,6 +14,13 @@ using System.Runtime.InteropServices;
 
 namespace osuThumb
 {
+    public enum MeasureType
+    {
+        pixels,
+        mult,
+        canvasmult
+    }
+
     public partial class MainForm : Form
     {
         //Folder variables
@@ -219,19 +226,25 @@ namespace osuThumb
 
                             if (io.LoadImage())
                             {
-                                io.path = save;
-
                                 Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
+
+
+
+                                int w;
+                                int h;
 
                                 Rectangle rect = new Rectangle(
                                     (int)(io.rect.X * (io.canvasRelative ? bmp.Width : 1)),
                                     (int)(io.rect.Y * (io.canvasRelative ? bmp.Height : 1)),
-                                    (int)(io.rect.Width * (io.canvasRelative ? bmp.Width : bitmap.Width)),
-                                    (int)(io.rect.Height * (io.canvasRelative ? bmp.Height : bitmap.Height))
+                                    w,
+                                    h
+                                    //(int)(io.rect.Width * (io.canvasRelative ? bmp.Width : bitmap.Width)),
+                                    //(int)(io.rect.Height * (io.canvasRelative ? bmp.Height : bitmap.Height))
                                 );
 
                                 g.DrawImage(bitmap, rect);
                             }
+                            io.path = save;
                         }
                         else if (renderObject.GetType() == typeof(TextObject))
                         {
