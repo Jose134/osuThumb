@@ -513,6 +513,16 @@ namespace osuThumb
 
                         textObject.textSize = size;
                     }
+                    else if (noSpaces.StartsWith("position-type:"))
+                    {
+                        string[] data = noSpaces.Split(':');
+                        MeasureType positionType = MeasureType.pixels;
+                        if (data[1] == "canvasmult")
+                        {
+                            positionType = MeasureType.canvasmult;
+                        }
+                        textObject.positionType = positionType;
+                    }
 
                     //End object
                     if (noSpaces[0] == '}')
@@ -553,16 +563,6 @@ namespace osuThumb
                         int a = int.Parse(split[3]);
 
                         rectangleObject.color = Color.FromArgb(a, r, g, b);
-                    }
-                    else if (noSpaces.StartsWith("canvas-size:"))
-                    {
-                        string[] data = noSpaces.Split(':');
-                        bool canvasRelative = true;
-                        if (data[1] == "false")
-                        {
-                            canvasRelative = false;
-                        }
-                        rectangleObject.canvasRelative = canvasRelative;
                     }
                     else if (noSpaces.StartsWith("position-type:"))
                     {
@@ -658,16 +658,6 @@ namespace osuThumb
 
                         imageObject.color = Color.FromArgb(a, r, g, b);
                     }
-                    else if (noSpaces.StartsWith("canvas-size:"))
-                    {
-                        string[] data = noSpaces.Split(':');
-                        bool canvasRelative = false;
-                        if (data[1] == "true")
-                        {
-                            canvasRelative = true;
-                        }
-                        imageObject.canvasRelative = canvasRelative;
-                    }
                     else if (noSpaces.StartsWith("position-type:"))
                     {
                         string[] data = noSpaces.Split(':');
@@ -682,7 +672,11 @@ namespace osuThumb
                     {
                         string[] data = noSpaces.Split(':');
                         MeasureType sizeType = MeasureType.pixels;
-                        if (data[1] == "canvasmult")
+                        if (data[1] == "mult")
+                        {
+                            sizeType = MeasureType.mult;
+                        }
+                        else if (data[1] == "canvasmult")
                         {
                             sizeType = MeasureType.canvasmult;
                         }

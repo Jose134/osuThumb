@@ -11,7 +11,6 @@ namespace osuThumb
     {
         private RectangleF _rect;
         private Color _color;
-        private bool _canvasRelative;
         private MeasureType _positionType;
         private MeasureType _sizeType;
 
@@ -35,17 +34,6 @@ namespace osuThumb
             set
             {
                 _color = value;
-            }
-        }
-        public bool canvasRelative
-        {
-            get
-            {
-                return _canvasRelative;
-            }
-            set
-            {
-                _canvasRelative = value;
             }
         }
         public MeasureType positionType
