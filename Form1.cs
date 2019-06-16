@@ -283,10 +283,17 @@ namespace osuThumb
                             text += to.suffix;
                             SolidBrush brush = new SolidBrush(to.color);
                             Font font = new Font(layoutFont.FontFamily, to.textSize == -1 ? layoutFont.Size : to.textSize);
-                            Point position = new Point(
-                                (int)(to.position.X * bmp.Width),
-                                (int)(to.position.Y * bmp.Height)
-                            );
+
+                            int x = (int)to.position.Y;
+                            int y = (int)to.position.X;
+
+                            if (to.positionType == MeasureType.canvasmult)
+                            {
+                                x = (int)(to.position.X * bmp.Width);
+                                y = (int)(to.position.Y * bmp.Height);
+                            }
+
+                            Point position = new Point(x, y);
                             g.DrawString(text, font, brush, position);
                         }
                         else if (renderObject.GetType() == typeof(RectangleObject))
