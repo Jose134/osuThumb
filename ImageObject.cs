@@ -7,104 +7,34 @@ using System.Drawing;
 
 namespace osuThumb
 {
-    class ImageObject
+    class ImageObject : RenderObject
     {
-        private Image _image;
-        private string _path;
-        private RectangleF _rect;
-        private Color _color;
-        private MeasureType _positionType;
-        private MeasureType _sizeType;
-
-        public Image image
-        {
-            get
-            {
-                return _image;
-            }
-            set
-            {
-                _image = value;
-            }
-        }
-        public string path
-        {
-            get
-            {
-                return _path;
-            }
-            set
-            {
-                _path = value;
-            }
-        }
-        public RectangleF rect
-        {
-            get
-            {
-                return _rect;
-            }
-            set
-            {
-                _rect = value;
-            }
-        }
-        public Color color
-        {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-            }
-        }
-        public MeasureType positionType
-        {
-            get
-            {
-                return _positionType;
-            }
-            set
-            {
-                _positionType = value;
-            }
-        }
-        public MeasureType sizeType
-        {
-            get
-            {
-                return _sizeType;
-            }
-            set
-            {
-                _sizeType = value;
-            }
-        }
+        public SizeType sizeType { get; private set; }
+        public float width       { get; private set; }
+        public float height      { get; private set; }
+        public string imagePath  { get; private set; }
 
         //Constructor
-        public ImageObject ()
+        public ImageObject(
+            string imagePath,
+            Color color,
+            float x = 0,
+            float y = 0,
+            float width = 0,
+            float height = 0,
+            PositionType positionType = PositionType.Pixel,
+            SizeType sizeType = SizeType.Pixel
+        )
+            : base(positionType, x, y, color)
         {
-            this._image = null;
-            this._path = "";
-            this._rect = new RectangleF(0, 0, 1, 1);
-            this._color = Color.FromArgb(255, 255, 255, 255);
-            this._positionType = MeasureType.pixels;
-            this._sizeType = MeasureType.pixels;
+            this.imagePath = imagePath;
+            this.sizeType = sizeType;
+            this.width = width;
+            this.height = height;
         }
-        public ImageObject(string path, RectangleF rect, Color color)
-        {
-            this._path = path;
-            this._rect = rect;
-            this._color = color;
-            this._positionType = MeasureType.pixels;
-            this._sizeType = MeasureType.pixels;
-
-            LoadImage();
-        }
-
-        public bool LoadImage ()
+        
+        /*
+        private bool LoadImage ()
         {
             bool success = true;
 
@@ -112,12 +42,20 @@ namespace osuThumb
             {
                 _image = Bitmap.FromFile(_path);
             }
-            catch
+            catch (System.IO.FileNotFoundException e)
             {
+                
                 success = false;
             }
 
             return success;
         }
+        */
+
+        public override void Render (ref Graphics graphcis)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -7,100 +7,32 @@ using System.Drawing;
 
 namespace osuThumb
 {
-    class TextObject
+    class TextObject : RenderObject
     {
-        private string _text;
-        private string _suffix;
-        private PointF _position;
-        private Color _color;
-        private int _textSize;
-        private MeasureType _positionType;
-
-        public string text
-        {
-            get
-            {
-                return _text;
-            }
-            set
-            {
-                _text = value;
-            }
-        }
-        public string suffix
-        {
-            get
-            {
-                return _suffix;
-            }
-            set
-            {
-                _suffix = value;
-            }
-        }
-        public PointF position
-        {
-            get
-            {
-                return _position;
-            }
-            set
-            {
-                _position = value;
-            }
-        }
-        public Color color
-        {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-            }
-        }
-        public int textSize
-        {
-            get
-            {
-                return _textSize;
-            }
-            set
-            {
-                _textSize = value;
-            }
-        }
-        public MeasureType positionType
-        {
-            get
-            {
-                return _positionType;
-            }
-            set
-            {
-                _positionType = value;
-            }
-        }
+        public string text { get; private set; }
+        public string suffix { get; private set; }
+        public int fontSize { get; private set; }
 
         //Constructor
-        public TextObject ()
+        public TextObject(
+            string text,
+            Color color,
+            float x = 0,
+            float y = 0,
+            PositionType positionType = PositionType.Pixel,
+            string suffix = "",
+            int fontSize = 24
+        )
+            : base(positionType, x, y, color)
         {
-            this._text = "";
-            this._suffix = "";
-            this._position = new PointF(0, 0);
-            this._color = Color.FromArgb(255, 255, 255, 255);
-            this.textSize = -1;
-            this._positionType = MeasureType.pixels;
+            this.text = text;
+            this.suffix = suffix;
+            this.fontSize = fontSize;
         }
-        public TextObject(string text, string suffix, PointF position, Color color, int textSize)
+
+        public override void Render (ref Graphics g)
         {
-            this._text = text;
-            this._suffix = suffix;
-            this._position = position;
-            this._color = color;
-            this.textSize = textSize;
-            this._positionType = MeasureType.pixels;
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,72 +7,71 @@ using System.Drawing;
 
 namespace osuThumb
 {
-    class RectangleObject
+    class RectangleObject : RenderObject
     {
-        private RectangleF _rect;
-        private Color _color;
-        private MeasureType _positionType;
-        private MeasureType _sizeType;
-
-        public RectangleF rect
-        {
-            get
-            {
-                return _rect;
-            }
-            set
-            {
-                _rect = value;
-            }
-        }
-        public Color color
-        {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-            }
-        }
-        public MeasureType positionType
-        {
-            get
-            {
-                return _positionType;
-            }
-            set
-            {
-                _positionType = value;
-            }
-        }
-        public MeasureType sizeType
-        {
-            get
-            {
-                return _sizeType;
-            }
-            set
-            {
-                _sizeType = value;
-            }
-        }
+        public SizeType sizeType { get; private set; }
+        public float width       { get; private set; }
+        public float height      { get; private set; }
 
         //Constructor
-        public RectangleObject ()
+        public RectangleObject(
+            Color color,
+            float x = 0,
+            float y = 0,
+            float width = 0,
+            float height = 0,
+            PositionType positionType = PositionType.Pixel,
+            SizeType sizeType = SizeType.Pixel
+        )
+            : base(positionType, x, y, color)
         {
-            this._rect = new RectangleF(0, 0, 1, 1);
-            this._color = Color.FromArgb(255, 255, 0, 255);
-            this._positionType = MeasureType.pixels;
-            this._sizeType = MeasureType.pixels;
+            this.sizeType = sizeType;
+            this.width = width;
+            this.height = height;
         }
-        public RectangleObject(RectangleF rect, Color color)
+
+        //Renders the object onto the graphics
+        public override void Render (ref Graphics graphics)
         {
-            this._rect = rect;
-            this._color = color;
-            this._positionType = MeasureType.pixels;
-            this._sizeType = MeasureType.pixels;
+            SolidBrush b = new SolidBrush(color);
+
+            int x = 0, y = 0, w = 0, h = 0;
+
+            //Calculates position
+            switch (positionType)
+            {
+                case PositionType.Pixel:
+                    x = (int)Math.Floor(this.x);
+                    y = (int)Math.Floor(this.y);
+                    break;
+                case PositionType.CanvasMult:
+                    x = (int)Math.Floor(this.x * graphics.ClipBounds.Width);
+                    y = (int)Math.Floor(this.y * graphics.ClipBounds.Height);
+                    break;
+            }
+
+            //Calculates size
+            switch (sizeType)
+            {
+                case SizeType.Pixel:
+                    w = (int)Math.Floor(this.width);
+                    h = (int)Math.Floor(this.height);
+                    break;
+                case SizeType.CanvasMult:
+                    w = (int)Math.Floor(this.width * graphics.ClipBounds.Width);
+                    h = (int)Math.Floor(this.height * graphics.ClipBounds.Height);
+                    break;
+                case SizeType.SelfMult:
+                    /*Rectangle objects don't implement 
+                    this type so we operate as pixel*/
+                    w = (int)Math.Floor(this.width);
+                    h = (int)Math.Floor(this.height);
+                    break;
+                    
+            }
+
+            graphics.FillRectangle(b, x, y, w, h);
         }
     }
+
 }
