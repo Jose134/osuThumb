@@ -7,10 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace osuThumb
 {
@@ -208,37 +206,6 @@ namespace osuThumb
             {
                 g.DrawImage(render, 0, 0, preview.Width, preview.Height);
             }
-        }
-
-        //Creates a tinted Bitmap
-        private Bitmap ColorTint (Bitmap src, Color tint)
-        {
-            BitmapData data = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-            byte[] pixelBuffer = new byte[data.Stride * data.Height];
-            Marshal.Copy(data.Scan0, pixelBuffer, 0, pixelBuffer.Length);
-
-            float r, g, b;
-            for (int i = 0; (i + 4) < pixelBuffer.Length; i += 4) {
-                b = pixelBuffer[i]   * ((float)tint.B / 255);
-                g = pixelBuffer[i+1] * ((float)tint.G / 255);
-                r = pixelBuffer[i+2] * ((float)tint.R / 255);
-
-                if (b > 255) { b = 255; }
-                if (g > 255) { g = 255; }
-                if (r > 255) { r = 255; }
-
-                pixelBuffer[i]   = (byte)b;
-                pixelBuffer[i+1] = (byte)g;
-                pixelBuffer[i+2] = (byte)r;
-            }
-
-            Bitmap result = new Bitmap(src.Width, src.Height);
-            BitmapData resultData = result.LockBits(new Rectangle(0, 0, result.Width, result.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-
-            Marshal.Copy(pixelBuffer, 0, resultData.Scan0, pixelBuffer.Length);
-            result.UnlockBits(resultData);
-
-            return result;
         }
 
         #endregion
