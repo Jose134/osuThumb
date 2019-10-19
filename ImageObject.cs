@@ -55,6 +55,56 @@ namespace osuThumb
         public override void Render (ref Graphics graphcis)
         {
             throw new NotImplementedException();
+
+            //Checks for variables in path property
+            string save = imagePath;
+            if ((imagePath[0] == '%') && (imagePath[imagePath.Length - 1] == '%'))
+            {
+                string variableName = path.Substring(1, path.Length - 2);
+
+                if (variableName == "BG")
+                {
+                    path = bgFilePath;
+                }
+                else
+                {
+                    string varValue = MainForm.ReadVariable(variableName);
+                }
+            }
+
+            if (LoadImage())
+            {
+                Bitmap bitmap = ColorTint((Bitmap)image, color);
+
+                int x = (int)rect.X;
+                int y = (int)rect.Y;
+                int w = (int)rect.Width;
+                int h = (int)rect.Height;
+
+                //positType == MeasureType.pixels case omitted because x and y wouldn't need to change their value
+                if (positType == MeasureType.canvasmult)
+                {
+                    x = (int)(rect.X * bmp.Width);
+                    y = (int)(rect.Y * bmp.Height);
+                }
+
+                //sizeType == MeasureType.pixels case omitted because w and h wouldn't need to change their value
+                if (sizeType == MeasureType.mult)
+                {
+                    w = (int)(rect.Width * bitmap.Width);
+                    h = (int)(rect.Height * bitmap.Height);
+                }
+                else if (sizeType == MeasureType.canvasmult)
+                {
+                    w = (int)(rect.Width * bmp.Width);
+                    h = (int)(rect.Height * bmp.Height);
+                }
+
+                Rectangle rect = new Rectangle(x, y, w, h);
+
+                g.DrawImage(bitmap, rect);
+            }
+            path = save;
         }
 
     }

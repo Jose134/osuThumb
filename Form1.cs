@@ -183,6 +183,7 @@ namespace osuThumb
 
         #region Thumbnail Generation
 
+
         //THUMBNAIL GENERATOR
         private void generateButton_Click(object sender, EventArgs e)
         {
@@ -195,135 +196,8 @@ namespace osuThumb
                     //Renders each object in the list
                     foreach (object renderObject in renderObjects)
                     {
-
-                        if (renderObject.GetType() == typeof(ImageObject))
-                        {
-                            ImageObject io = (ImageObject)renderObject;
-                            //Checks for variables in path property
-                            string save = io.path;
-                            if ((io.path[0] == '%') && (io.path[io.path.Length - 1] == '%'))
-                            {
-                                string variableName = io.path.Substring(1, io.path.Length - 2);
-
-                                if (variableName == "BG")
-                                {
-                                    io.path = bgFilePath;
-                                }
-                                else
-                                {
-                                    foreach (Control c in propertiesPanel.Controls)
-                                    {
-                                        if (c.GetType() == typeof(TextBox))
-                                        {
-                                            if (c.Name == "customVariableBox_" + variableName)
-                                            {
-                                                io.path = "res/" + variableName + "/" + c.Text;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (io.LoadImage())
-                            {
-                                Bitmap bitmap = ColorTint((Bitmap)io.image, io.color);
-
-                                int x = (int)io.rect.X;
-                                int y = (int)io.rect.Y;
-                                int w = (int)io.rect.Width;
-                                int h = (int)io.rect.Height;
-
-                                //positionType == MeasureType.pixels case omitted because x and y wouldn't need to change their value
-                                if (io.positionType == MeasureType.canvasmult)
-                                {
-                                    x = (int)(io.rect.X * bmp.Width);
-                                    y = (int)(io.rect.Y * bmp.Height);
-                                }
-
-                                //sizeType == MeasureType.pixels case omitted because w and h wouldn't need to change their value
-                                if (io.sizeType == MeasureType.mult)
-                                {
-                                    w = (int)(io.rect.Width * bitmap.Width);
-                                    h = (int)(io.rect.Height * bitmap.Height);
-                                }
-                                else if (io.sizeType == MeasureType.canvasmult)
-                                {
-                                    w = (int)(io.rect.Width * bmp.Width);
-                                    h = (int)(io.rect.Height * bmp.Height);
-                                }
-
-                                Rectangle rect = new Rectangle(x, y, w, h);
-
-                                g.DrawImage(bitmap, rect);
-                            }
-                            io.path = save;
-                        }
-                        else if (renderObject.GetType() == typeof(TextObject))
-                        {
-                            TextObject to = (TextObject)renderObject;
-                            string text = to.text;
-
-                            //Checks for custom text variables
-                            if ((to.text[0] == '%') && (to.text[to.text.Length - 1] == '%'))
-                            {
-                                string variableName = to.text.Substring(1, to.text.Length - 2);
-
-                                foreach (Control c in propertiesPanel.Controls)
-                                {
-                                    if (c.GetType() == typeof(TextBox))
-                                    {
-                                        if (c.Name == "customVariableBox_" + variableName)
-                                        {
-                                            text = c.Text;
-                                        }
-                                    }
-                                }
-                            }
-
-                            text += to.suffix;
-                            SolidBrush brush = new SolidBrush(to.color);
-                            Font font = new Font(layoutFont.FontFamily, to.textSize == -1 ? layoutFont.Size : to.textSize);
-
-                            int x = (int)to.position.Y;
-                            int y = (int)to.position.X;
-
-                            if (to.positionType == MeasureType.canvasmult)
-                            {
-                                x = (int)(to.position.X * bmp.Width);
-                                y = (int)(to.position.Y * bmp.Height);
-                            }
-
-                            Point position = new Point(x, y);
-                            g.DrawString(text, font, brush, position);
-                        }
-                        else if (renderObject.GetType() == typeof(RectangleObject))
-                        {
-                            RectangleObject ro = (RectangleObject)renderObject;
-
-                            SolidBrush brush = new SolidBrush(ro.color);
-
-                            int x = (int)ro.rect.X;
-                            int y = (int)ro.rect.Y;
-                            int w = (int)ro.rect.Width;
-                            int h = (int)ro.rect.Height;
-
-                            //positionType == MeasureType.pixels case omitted because x and y wouldn't need to change their values
-                            if (ro.positionType == MeasureType.canvasmult)
-                            {
-                                x = (int)(ro.rect.X * bmp.Width);
-                                y = (int)(ro.rect.Y * bmp.Height);
-                            }
-
-                            //sizeType == MeasureType.pixels case omitted becuase w and h wouldn't need to change their values
-                            if (ro.sizeType == MeasureType.canvasmult)
-                            {
-                                w = (int)(ro.rect.Width * bmp.Width);
-                                h = (int)(ro.rect.Height * bmp.Height);
-                            }
-
-                            Rectangle rect = new Rectangle(x, y, w, h);
-                            g.FillRectangle(brush, rect);
-                        }
+                        RenderObject ro = (RenderObject)renderObject;
+                        ro.Render(ref g);
                     }
                 }
 
