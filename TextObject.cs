@@ -30,7 +30,7 @@ namespace osuThumb
             this.fontSize = fontSize;
         }
 
-        public override void Render (ref Graphics g)
+        public override void Render (ref Graphics graphics)
         {
             throw new NotImplementedException();
         }

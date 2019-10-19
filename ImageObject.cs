@@ -33,78 +33,81 @@ namespace osuThumb
             this.height = height;
         }
         
-        /*
-        private bool LoadImage ()
+        private Image LoadImage ()
         {
-            bool success = true;
+            Image im = null;
 
             try
             {
-                _image = Bitmap.FromFile(_path);
+                im = Bitmap.FromFile(imagePath);
             }
             catch (System.IO.FileNotFoundException e)
             {
-                
-                success = false;
+                Helper.ShowError("couldn't load image " + e.FileName);
             }
 
-            return success;
+            return im;
         }
-        */
 
-        public override void Render (ref Graphics graphcis)
+        public override void Render (ref Graphics graphics)
         {
-            throw new NotImplementedException();
-
             //Checks for variables in path property
             string save = imagePath;
-            if ((imagePath[0] == '%') && (imagePath[imagePath.Length - 1] == '%'))
+            string variableName = null;
+            if (Helper.IsCustomVariable(imagePath, out variableName))
             {
-                string variableName = path.Substring(1, path.Length - 2);
-
                 if (variableName == "BG")
                 {
-                    path = bgFilePath;
+                    imagePath = Helper.bgFilePath;
                 }
                 else
                 {
-                    string varValue = MainForm.ReadVariable(variableName);
+                    imagePath = Helper.ReadVariable(variableName);
                 }
             }
 
-            if (LoadImage())
+            Image image = LoadImage();
+            if (image != null)
             {
-                Bitmap bitmap = ColorTint((Bitmap)image, color);
+                Bitmap bitmap = Helper.ColorTint((Bitmap)image, color);
 
-                int x = (int)rect.X;
-                int y = (int)rect.Y;
-                int w = (int)rect.Width;
-                int h = (int)rect.Height;
+                int x = 0, y = 0, w = 0, h = 0;
 
-                //positType == MeasureType.pixels case omitted because x and y wouldn't need to change their value
-                if (positType == MeasureType.canvasmult)
+                //Calculates position
+                switch (positionType)
                 {
-                    x = (int)(rect.X * bmp.Width);
-                    y = (int)(rect.Y * bmp.Height);
+                    case PositionType.Pixel:
+                        x = (int)Math.Floor(this.x);
+                        y = (int)Math.Floor(this.y);
+                        break;
+                    case PositionType.CanvasMult:
+                        x = (int)Math.Floor(this.x * graphics.ClipBounds.Width);
+                        y = (int)Math.Floor(this.y * graphics.ClipBounds.Height);
+                        break;
                 }
 
-                //sizeType == MeasureType.pixels case omitted because w and h wouldn't need to change their value
-                if (sizeType == MeasureType.mult)
+                //Calculates size
+                switch (sizeType)
                 {
-                    w = (int)(rect.Width * bitmap.Width);
-                    h = (int)(rect.Height * bitmap.Height);
-                }
-                else if (sizeType == MeasureType.canvasmult)
-                {
-                    w = (int)(rect.Width * bmp.Width);
-                    h = (int)(rect.Height * bmp.Height);
+                    case SizeType.Pixel:
+                        w = (int)Math.Floor(this.width);
+                        h = (int)Math.Floor(this.height);
+                        break;
+                    case SizeType.CanvasMult:
+                        w = (int)Math.Floor(this.width * graphics.ClipBounds.Width);
+                        h = (int)Math.Floor(this.height * graphics.ClipBounds.Height);
+                        break;
+                    case SizeType.SelfMult:
+                        w = (int)Math.Floor(this.width * bitmap.Width);
+                        h = (int)Math.Floor(this.height * bitmap.Height);
+                        break;
                 }
 
                 Rectangle rect = new Rectangle(x, y, w, h);
-
-                g.DrawImage(bitmap, rect);
+                graphics.DrawImage(bitmap, rect);
             }
-            path = save;
+
+            imagePath = save;
         }
 
     }
