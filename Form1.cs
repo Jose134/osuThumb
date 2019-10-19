@@ -22,13 +22,6 @@ namespace osuThumb
 
     public partial class MainForm : Form
     {
-        //Folder variables
-        private string appdataPath = "";
-        private string osuFolder = "";
-        private string songsPath = "";
-        private string bgFilePath = "";
-        private string layoutPath = "";
-
         //Drawing variables
         private List<object> renderObjects = new List<object>();
         private Font layoutFont = new Font("Arial", 24);
@@ -44,18 +37,18 @@ namespace osuThumb
         private void Form1_Load(object sender, EventArgs e)
         {
             //Checks if required directories exist
-            appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            osuFolder = appdataPath + @"\osu!";
+            Helper.appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            Helper.osuFolder = Helper.appdataPath + @"\osu!";
 
-            if (!Directory.Exists(osuFolder))
+            if (!Directory.Exists(Helper.osuFolder))
             {
                 MessageBox.Show("ERROR: osu folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
                 //gets osu's songs directory
-                songsPath = osuFolder + @"\Songs";
-                if (!Directory.Exists(songsPath))
+                Helper.songsPath = Helper.osuFolder + @"\Songs";
+                if (!Directory.Exists(Helper.songsPath))
                 {
                     MessageBox.Show("ERROR: osu's Songs folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -67,7 +60,7 @@ namespace osuThumb
         //Lets the user select an image from the beatmap's folder to use as background
         private void scanButton_Click(object sender, EventArgs e)
         {
-            string[] subdirectories = Directory.GetDirectories(songsPath);
+            string[] subdirectories = Directory.GetDirectories(Helper.songsPath);
             for (int i = 0; i < subdirectories.Length; i++)
             {
                 string beatmapsetId = subdirectories[i].Split(' ')[0];
@@ -80,7 +73,7 @@ namespace osuThumb
                     dialog.InitialDirectory = subdirectories[i];
                     if ((dialog.ShowDialog()) == DialogResult.OK)
                     {
-                        bgFilePath = dialog.FileName;
+                        Helper.bgFilePath = dialog.FileName;
                     }
 
                     return;
@@ -108,18 +101,18 @@ namespace osuThumb
                         if (line.StartsWith("layout"))
                         {
                             string[] data = line.Split('=');
-                            layoutPath = data[1].Substring(1);
+                            Helper.layoutPath = data[1].Substring(1);
                         }
                     }
                 }
 
-                if (!File.Exists(layoutPath))
+                if (!File.Exists(Helper.layoutPath))
                 {
                     MessageBox.Show("ERROR: the layout file in default.cfg wasn't found, maybe it was moved or deleted?", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    LoadLayout(layoutPath);
+                    LoadLayout(Helper.layoutPath);
                 }
             }
         }
@@ -127,7 +120,7 @@ namespace osuThumb
         //Saves current layout as default in the cfg file
         private void SaveToDefault ()
         {
-            if (!File.Exists(layoutPath))
+            if (!File.Exists(Helper.layoutPath))
             {
                 MessageBox.Show("ERROR: No .layout file loaded", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -140,7 +133,7 @@ namespace osuThumb
             }
 
             using (StreamWriter sw = new StreamWriter("default.cfg")) {
-                sw.WriteLine("layout = " + layoutPath);
+                sw.WriteLine("layout = " + Helper.layoutPath);
             }
         }
 
