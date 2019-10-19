@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace osuThumb
 {
@@ -187,16 +188,14 @@ namespace osuThumb
         {
             using (Bitmap bmp = new Bitmap(render.Width, render.Height))
             {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    g.Clear(Color.Black);
+                Graphics g = Graphics.FromImage(bmp);
+                g.Clear(Color.Black);
 
-                    //Renders each object in the list
-                    foreach (object renderObject in renderObjects)
-                    {
-                        RenderObject ro = (RenderObject)renderObject;
-                        ro.Render(ref g);
-                    }
+                //Renders each object in the list
+                foreach (object renderObject in renderObjects)
+                {
+                    RenderObject ro = (RenderObject)renderObject;
+                    ro.Render(ref g);
                 }
 
                 render = (Bitmap)bmp.Clone();
@@ -231,6 +230,7 @@ namespace osuThumb
         //Reads a layout file adding elements to the renderObjects List
         private void LoadLayout (string filePath)
         {
+            /*
             if (!File.Exists(filePath)) { return; }
 
             propertiesPanel.Controls.Clear();
@@ -549,6 +549,7 @@ namespace osuThumb
 
             //Updates the preview image to match the aspect ratio
             preview.Size = new Size(preview.Size.Width, preview.Size.Width * render.Height / render.Width);
+            */
         }
 
         #endregion
