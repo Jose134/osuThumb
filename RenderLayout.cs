@@ -32,7 +32,7 @@ namespace osuThumb
         public Font font { get; private set; }
 
         //Defaults
-        public Layout()
+        public RenderLayout()
         {
             this.renderObjects = new List<RenderObject>();
             this.resWidth = 1280;
