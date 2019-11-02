@@ -22,11 +22,7 @@ namespace osuThumb
 
     public partial class MainForm : Form
     {
-        //Drawing variables
-        private List<object> renderObjects = new List<object>();
-        private Font layoutFont = new Font("Arial", 24);
-
-        private Bitmap render = new Bitmap(1920, 1080);
+        private Bitmap render;
 
         public MainForm()
         {
@@ -42,7 +38,7 @@ namespace osuThumb
 
             if (!Directory.Exists(Helper.osuFolder))
             {
-                MessageBox.Show("ERROR: osu folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Helper.ShowError("osu folder wasn't found");
             }
             else
             {
@@ -50,7 +46,7 @@ namespace osuThumb
                 Helper.songsPath = Helper.osuFolder + @"\Songs";
                 if (!Directory.Exists(Helper.songsPath))
                 {
-                    MessageBox.Show("ERROR: osu's Songs folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Helper.ShowError("osu's Songs folder wasn't found");
                 }
             }
 
@@ -79,8 +75,8 @@ namespace osuThumb
                     return;
                 }
             }
-
-            MessageBox.Show("ERROR: beatmap's folder wasn't found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
+            Helper.ShowError("beatmap's folder wasn't found");
         }
 
         //Loads the layout in the default file
@@ -88,7 +84,7 @@ namespace osuThumb
         {
             if (!File.Exists("default.cfg"))
             {
-                MessageBox.Show("Error: default.cfg not found.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Helper.ShowError("default.cfg not found");
             }
             else
             {
@@ -108,7 +104,7 @@ namespace osuThumb
 
                 if (!File.Exists(Helper.layoutPath))
                 {
-                    MessageBox.Show("ERROR: the layout file in default.cfg wasn't found, maybe it was moved or deleted?", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Helper.ShowError("the layout file in default.cfg wasn't found, maybe it was moved or deleted?");
                 }
                 else
                 {
@@ -122,7 +118,7 @@ namespace osuThumb
         {
             if (!File.Exists(Helper.layoutPath))
             {
-                MessageBox.Show("ERROR: No .layout file loaded", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Helper.ShowError("No .layout file loaded");
                 return;
             }
 
@@ -169,7 +165,7 @@ namespace osuThumb
             FontDialog fontDialog = new FontDialog();
             if (fontDialog.ShowDialog() == DialogResult.OK)
             {
-                layoutFont = fontDialog.Font;
+                RenderLayout.current.SetFont(fontDialog.Font);
             }
         }
 
@@ -179,20 +175,7 @@ namespace osuThumb
         //THUMBNAIL GENERATOR
         private void generateButton_Click(object sender, EventArgs e)
         {
-            using (Bitmap bmp = new Bitmap(render.Width, render.Height))
-            {
-                Graphics g = Graphics.FromImage(bmp);
-                g.Clear(Color.Black);
-
-                //Renders each object in the list
-                foreach (object renderObject in renderObjects)
-                {
-                    RenderObject ro = (RenderObject)renderObject;
-                    ro.Render(ref g);
-                }
-
-                render = (Bitmap)bmp.Clone();
-            }
+            Bitmap render = RenderLayout.current.Render();
 
             using (Graphics g = preview.CreateGraphics())
             {

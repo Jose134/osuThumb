@@ -33,6 +33,43 @@ namespace osuThumb
         public override void Render (ref Graphics graphics)
         {
             throw new NotImplementedException();
+
+            /*
+
+            //Checks for variables in text property
+            string save = text;
+            string variableName = null;
+            if (Helper.IsCustomVariable(text, out variableName))
+            {
+                text = Helper.ReadVariable(variableName);
+            }
+            text = save;
+
+            SolidBrush brush = new SolidBrush(color);
+            Font font = new Font(layoutFont.)
+            graphics.DrawString(text + suffix, );
+
+
+                
+            
+
+            text += to.suffix;
+            SolidBrush brush = new SolidBrush(to.color);
+            Font font = new Font(layoutFont.FontFamily, to.textSize == -1 ? layoutFont.Size : to.textSize);
+
+            int x = (int)to.position.Y;
+            int y = (int)to.position.X;
+
+            if (to.positionType == MeasureType.canvasmult)
+            {
+                x = (int)(to.position.X * bmp.Width);
+                y = (int)(to.position.Y * bmp.Height);
+            }
+
+            Point position = new Point(x, y);
+            g.DrawString(text, font, brush, position);
+
+            */
         }
     }
 }
